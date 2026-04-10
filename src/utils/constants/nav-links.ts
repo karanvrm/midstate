@@ -1,4 +1,4 @@
-import { HelpCircleIcon, LineChartIcon, Link2Icon, LockIcon, NewspaperIcon, QrCodeIcon } from "lucide-react";
+import { LineChartIcon, Link2Icon, LockIcon, QrCodeIcon } from "lucide-react";
 
 export const NAV_LINKS = [
     {
@@ -42,19 +42,5 @@ export const NAV_LINKS = [
     {
         title: "Contact Us",
         href: "/contact-us",
-        menu: [
-            {
-                title: "Blog",
-                tagline: "Read articles on the latest trends in tech.",
-                href: "/contact-us/blog",
-                icon: NewspaperIcon,
-            },
-            {
-                title: "Help",
-                tagline: "Get answers to your questions.",
-                href: "/contact-us/help",
-                icon: HelpCircleIcon,
-            },
-        ]
     },
 ];

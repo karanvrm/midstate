@@ -8,7 +8,7 @@ const Footer = () => {
 
             <div className="absolute top-0 left-1/2 right-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-1.5 bg-foreground rounded-full"></div>
 
-            <div className="grid gap-8 xl:grid-cols-3 xl:gap-8 w-full">
+            <div className="grid gap-8 xl:grid-cols-4 xl:gap-8 w-full">
 
                 <AnimationContainer delay={0.1}>
                     <div className="flex flex-col items-start justify-start md:max-w-[200px]">
@@ -23,113 +23,85 @@ const Footer = () => {
                     </div>
                 </AnimationContainer>
 
-                <div className="grid-cols-2 gap-8 grid mt-16 xl:col-span-2 xl:mt-0">
-                    <div className="md:grid md:grid-cols-2 md:gap-8">
-                        <AnimationContainer delay={0.2}>
-                            <div className="">
-                                <h3 className="text-base font-medium text-white">
-                                    Candidates
-                                </h3>
-                                <ul className="mt-4 text-sm text-muted-foreground">
-                                    <li className="mt-2">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            Job Openings
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            Upload Resume
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            Application Status
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            Candidate Portal
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </AnimationContainer>
-                        <AnimationContainer delay={0.3}>
-                            <div className="mt-10 md:mt-0 flex flex-col">
-                                <h3 className="text-base font-medium text-white">
-                                    Social Handles
-                                </h3>
-                                <ul className="mt-4 text-sm text-muted-foreground">
-                                    <li className="">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            Facebook
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            Instagram
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            Twitter
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            LinkedIn
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </AnimationContainer>
+                <AnimationContainer delay={0.2}>
+                    <div className="">
+                        <h3 className="text-base font-medium text-white">
+                            Opportunities
+                        </h3>
+                        <ul className="mt-4 text-sm text-muted-foreground">
+                            <li className="">
+                                <Link href="" className="hover:text-foreground transition-all duration-300">
+                                    About Us
+                                </Link>
+                            </li>
+                            <li className="mt-2">
+                                <Link href="" className="hover:text-foreground transition-all duration-300">
+                                    Browse Jobs
+                                </Link>
+                            </li>
+                            <li className="mt-2">
+                                <Link href="" className="hover:text-foreground transition-all duration-300">
+                                    Candidate Dashboard
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
-                    <div className="md:grid md:grid-cols-2 md:gap-8">
-                        <AnimationContainer delay={0.4}>
-                            <div className="">
-                                <h3 className="text-base font-medium text-white">
+                </AnimationContainer>
+
+                <AnimationContainer delay={0.3}>
+                    <div className="flex flex-col">
+                        <h3 className="text-base font-medium text-white">
+                            Social Handles
+                        </h3>
+                        <ul className="mt-4 text-sm text-muted-foreground">
+                            <li className="">
+                                <Link href="http://facebook.com/midstateglobalservices" className="hover:text-foreground transition-all duration-300">
+                                    Facebook
+                                </Link>
+                            </li>
+                            <li className="mt-2">
+                                <Link href="https://www.instagram.com/midstateglobalservices/" className="hover:text-foreground transition-all duration-300">
+                                    Instagram
+                                </Link>
+                            </li>
+                            <li className="mt-2">
+                                <Link href="https://www.youtube.com/@midstateglobalservices" className="hover:text-foreground transition-all duration-300">
+                                    YouTube
+                                </Link>
+                            </li>
+                            <li className="mt-2">
+                                <Link href="https://www.linkedin.com/company/midstateglobalservices/" className="hover:text-foreground transition-all duration-300">
+                                    LinkedIn
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+                </AnimationContainer>
+
+                <AnimationContainer delay={0.4}>
+                    <div className="flex flex-col">
+                        <h3 className="text-base font-medium text-white">
+                            Company
+                        </h3>
+                        <ul className="mt-4 text-sm text-muted-foreground">
+                            <li className="">
+                                <Link href="/privacy" className="hover:text-foreground transition-all duration-300">
+                                    Privacy Policy
+                                </Link>
+                            </li>
+                            <li className="mt-2">
+                                <Link href="/terms" className="hover:text-foreground transition-all duration-300">
+                                    Terms & Conditions
+                                </Link>
+                            </li>
+                            <li className="mt-2">
+                                <Link href="/contact-us" className="hover:text-foreground transition-all duration-300">
                                     Contact Us
-                                </h3>
-                                <ul className="mt-4 text-sm text-muted-foreground">
-                                    <li className="mt-2">
-                                        <Link href="/contact-us/blog" className="hover:text-foreground transition-all duration-300">
-                                            Blog
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="/contact-us/help" className="hover:text-foreground transition-all duration-300">
-                                            Support
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </AnimationContainer>
-                        <AnimationContainer delay={0.5}>
-                            <div className="mt-10 md:mt-0 flex flex-col">
-                                <h3 className="text-base font-medium text-white">
-                                    Company
-                                </h3>
-                                <ul className="mt-4 text-sm text-muted-foreground">
-                                    <li className="">
-                                        <Link href="" className="hover:text-foreground transition-all duration-300">
-                                            About Us
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="/privacy" className="hover:text-foreground transition-all duration-300">
-                                            Privacy Policy
-                                        </Link>
-                                    </li>
-                                    <li className="mt-2">
-                                        <Link href="/terms" className="hover:text-foreground transition-all duration-300">
-                                            Terms & Conditions
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </AnimationContainer>
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
-                </div>
+                </AnimationContainer>
 
             </div>
 
