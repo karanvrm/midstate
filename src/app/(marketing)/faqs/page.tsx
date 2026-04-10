@@ -1,33 +1,16 @@
-import { AnimationContainer, MaxWidthWrapper, PricingCards } from "@/components";
+import { AnimationContainer, MaxWidthWrapper } from "@/components";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import MagicBadge from "@/components/ui/magic-badge";
 import { FAQ } from "@/utils/constants/faq";
 
-const EnterprisePage = () => {
+const FAQsPage = () => {
     return (
         <MaxWidthWrapper className="mb-40">
             <AnimationContainer delay={0.1}>
-                <div className="flex flex-col items-center justify-center py-10 max-w-lg mx-auto">
-                    <MagicBadge title="Pricing" />
-                    <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold font-heading text-center mt-6 !leading-tight">
-                        Simple and transparent pricing
-                    </h1>
-                    <p className="text-base md:text-lg mt-6 text-center text-muted-foreground">
-                        Choose a plan that works for you. No hidden fees. No surprises.
-                    </p>
-                </div>
-            </AnimationContainer>
-
-            <AnimationContainer delay={0.2}>
-                <PricingCards />
-            </AnimationContainer>
-
-            <AnimationContainer delay={0.3}>
                 <div className="mt-20 w-full">
                     <div className="flex flex-col items-center justify-center w-full pt-12">
                         <h2 className="mt-6 text-2xl font-semibold text-center lg:text-3xl xl:text-4xl">
@@ -54,4 +37,4 @@ const EnterprisePage = () => {
     )
 };
 
-export default EnterprisePage
+export default FAQsPage

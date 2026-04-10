@@ -55,7 +55,7 @@ const MobileNavbar = () => {
                             <Accordion type="single" collapsible className="!w-full">
                                 {NAV_LINKS.map((link) => (
                                     <AccordionItem key={link.title} value={link.title} className="last:border-none">
-                                        {link.menu ? (
+                                        {link.menu && link.title !== "About Us" ? (
                                             <>
                                                 <AccordionTrigger>
                                                     {link.title}

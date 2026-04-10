@@ -7,8 +7,41 @@ import MagicBadge from "@/components/ui/magic-badge";
 import MagicCard from "@/components/ui/magic-card";
 import { PROCESS } from "@/utils";
 import { REVIEWS } from "@/utils/constants/misc";
-import { ArrowRightIcon, StarIcon } from "lucide-react";
+import { ArrowRightIcon, BriefcaseBusinessIcon, HeadsetIcon, LandmarkIcon, MonitorIcon, ShoppingBagIcon, StarIcon } from "lucide-react";
 import Link from "next/link";
+
+const LATEST_JOB_OPENINGS = [
+    {
+        title: "Non IT Jobs",
+        icon: BriefcaseBusinessIcon,
+        accent: "from-rose-500/10 via-rose-500/5 to-transparent",
+    },
+    {
+        title: "BPO/KPO/LPO",
+        icon: HeadsetIcon,
+        accent: "from-amber-500/10 via-amber-500/5 to-transparent",
+    },
+    {
+        title: "IT Jobs",
+        icon: MonitorIcon,
+        accent: "from-sky-500/10 via-sky-500/5 to-transparent",
+    },
+    {
+        title: "BFSI Jobs",
+        icon: LandmarkIcon,
+        accent: "from-cyan-500/10 via-cyan-500/5 to-transparent",
+    },
+    {
+        title: "Finance",
+        icon: BriefcaseBusinessIcon,
+        accent: "from-fuchsia-500/10 via-fuchsia-500/5 to-transparent",
+    },
+    {
+        title: "Retail Jobs",
+        icon: ShoppingBagIcon,
+        accent: "from-emerald-500/10 via-emerald-500/5 to-transparent",
+    },
+];
 
 const HomePage = async () => {
 
@@ -35,14 +68,6 @@ const HomePage = async () => {
                         <p className="mb-12 text-lg tracking-tight text-muted-foreground md:text-xl text-balance">
                             Discover better career opportunities with ease. Connect with companies actively hiring and take the next step toward the job you deserve.
                         </p>
-                        <div className="flex items-center justify-center whitespace-nowrap gap-4 z-50">
-                            <Button asChild>
-                                <Link href="/auth/sign-in" className="flex items-center">
-                                    Join Us
-                                    <ArrowRightIcon className="w-4 h-4 ml-2" />
-                                </Link>
-                            </Button>
-                        </div>
                     </AnimationContainer>
 
                     {/* Image/visual block removed per request */}
@@ -105,6 +130,61 @@ const HomePage = async () => {
 
             {/* Pricing section removed per request */}
 
+            {/* Latest Job Opening Section */}
+            <MaxWidthWrapper className="py-10">
+                <AnimationContainer delay={0.1}>
+                    <div className="flex flex-col items-center justify-center w-full py-8">
+                        <div className="flex items-center gap-4 w-full max-w-5xl">
+                            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-border to-border/70" />
+                            <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-background/80 px-4 py-2 text-sm font-medium uppercase tracking-[0.22em] text-foreground/90 shadow-[0_0_0_1px_rgba(255,255,255,0.03)]">
+                                <BriefcaseBusinessIcon className="size-4 text-violet-400" />
+                                Latest Job Opening
+                            </div>
+                            <div className="h-px flex-1 bg-gradient-to-l from-transparent via-border to-border/70" />
+                        </div>
+                        <p className="mt-6 max-w-2xl text-center text-lg text-muted-foreground">
+                            Explore current openings across key industries and jump straight to our jobs page for full details.
+                        </p>
+                    </div>
+                </AnimationContainer>
+                <div className="grid grid-cols-1 gap-4 py-8 sm:grid-cols-2 xl:grid-cols-3 md:gap-6">
+                    {LATEST_JOB_OPENINGS.map((job, index) => (
+                        <AnimationContainer delay={0.1 * (index + 1)} key={job.title}>
+                            <MagicCard className="h-full border-border/70 bg-neutral-950/80 p-0">
+                                <div className={`relative flex h-full min-h-[260px] flex-col overflow-hidden rounded-xl bg-gradient-to-br ${job.accent}`}>
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_45%)]" />
+                                    <div className="relative flex h-full flex-col items-start justify-between p-8">
+                                        <div className="space-y-6">
+                                            <div className="flex size-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 shadow-[0_10px_30px_rgba(0,0,0,0.35)]">
+                                                <job.icon className="size-7 text-foreground" strokeWidth={1.8} />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <h3 className="text-2xl font-medium text-foreground">
+                                                    {job.title}
+                                                </h3>
+                                                <p className="max-w-xs text-sm text-muted-foreground">
+                                                    Discover curated openings and role updates tailored to this category.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <Button
+                                            asChild
+                                            variant="ghost"
+                                            className="group h-auto px-0 py-0 text-sm font-semibold uppercase tracking-[0.18em] text-orange-300 hover:bg-transparent hover:text-orange-200"
+                                        >
+                                            <Link href="/jobs">
+                                                Learn more
+                                                <ArrowRightIcon className="ml-2 size-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </div>
+                            </MagicCard>
+                        </AnimationContainer>
+                    ))}
+                </div>
+            </MaxWidthWrapper>
+
             {/* Reviews Section */}
             <MaxWidthWrapper className="py-10">
                 <AnimationContainer delay={0.1}>
@@ -118,91 +198,33 @@ const HomePage = async () => {
                         </p>
                     </div>
                 </AnimationContainer>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-start gap-4 md:gap-8 py-10">
-                    <div className="flex flex-col items-start h-min gap-6">
-                        {REVIEWS.slice(0, 3).map((review, index) => (
-                            <AnimationContainer delay={0.2 * index} key={index}>
-                                <MagicCard key={index} className="md:p-0">
-                                    <Card className="flex flex-col w-full border-none h-min">
-                                        <CardHeader className="space-y-0">
-                                            <CardTitle className="text-lg font-medium text-muted-foreground">
-                                                {review.name}
-                                            </CardTitle>
-                                            <CardDescription>
-                                                {review.username}
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent className="space-y-4 pb-4">
-                                            <p className="text-muted-foreground">
-                                                {review.review}
-                                            </p>
-                                        </CardContent>
-                                        <CardFooter className="w-full space-x-1 mt-auto">
-                                            {Array.from({ length: review.rating }, (_, i) => (
-                                                <StarIcon key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                                            ))}
-                                        </CardFooter>
-                                    </Card>
-                                </MagicCard>
-                            </AnimationContainer>
-                        ))}
-                    </div>
-                    <div className="flex flex-col items-start h-min gap-6">
-                        {REVIEWS.slice(3, 6).map((review, index) => (
-                            <AnimationContainer delay={0.2 * index} key={index}>
-                                <MagicCard key={index} className="md:p-0">
-                                    <Card className="flex flex-col w-full border-none h-min">
-                                        <CardHeader className="space-y-0">
-                                            <CardTitle className="text-lg font-medium text-muted-foreground">
-                                                {review.name}
-                                            </CardTitle>
-                                            <CardDescription>
-                                                {review.username}
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent className="space-y-4 pb-4">
-                                            <p className="text-muted-foreground">
-                                                {review.review}
-                                            </p>
-                                        </CardContent>
-                                        <CardFooter className="w-full space-x-1 mt-auto">
-                                            {Array.from({ length: review.rating }, (_, i) => (
-                                                <StarIcon key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                                            ))}
-                                        </CardFooter>
-                                    </Card>
-                                </MagicCard>
-                            </AnimationContainer>
-                        ))}
-                    </div>
-                    <div className="flex flex-col items-start h-min gap-6">
-                        {REVIEWS.slice(6, 9).map((review, index) => (
-                            <AnimationContainer delay={0.2 * index} key={index}>
-                                <MagicCard key={index} className="md:p-0">
-                                    <Card className="flex flex-col w-full border-none h-min">
-                                        <CardHeader className="space-y-0">
-                                            <CardTitle className="text-lg font-medium text-muted-foreground">
-                                                {review.name}
-                                            </CardTitle>
-                                            <CardDescription>
-                                                {review.username}
-                                            </CardDescription>
-                                        </CardHeader>
-                                        <CardContent className="space-y-4 pb-4">
-                                            <p className="text-muted-foreground">
-                                                {review.review}
-                                            </p>
-                                        </CardContent>
-                                        <CardFooter className="w-full space-x-1 mt-auto">
-                                            {Array.from({ length: review.rating }, (_, i) => (
-                                                <StarIcon key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
-                                            ))}
-                                        </CardFooter>
-                                    </Card>
-                                </MagicCard>
-                            </AnimationContainer>
-                        ))}
-                    </div>
+                <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-4 py-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+                    {REVIEWS.map((review, index) => (
+                        <AnimationContainer delay={0.15 * index} key={index} className="w-full">
+                            <MagicCard className="h-full max-w-none md:p-0">
+                                <Card className="flex h-full w-full flex-col border-none">
+                                    <CardHeader className="space-y-0">
+                                        <CardTitle className="text-lg font-medium text-muted-foreground">
+                                            {review.name}
+                                        </CardTitle>
+                                        <CardDescription>
+                                            {review.username}
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4 pb-4">
+                                        <p className="text-muted-foreground">
+                                            {review.review}
+                                        </p>
+                                    </CardContent>
+                                    <CardFooter className="mt-auto w-full space-x-1">
+                                        {Array.from({ length: review.rating }, (_, i) => (
+                                            <StarIcon key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+                                        ))}
+                                    </CardFooter>
+                                </Card>
+                            </MagicCard>
+                        </AnimationContainer>
+                    ))}
                 </div>
             </MaxWidthWrapper>
 
@@ -217,14 +239,6 @@ const HomePage = async () => {
                             <p className="text-muted-foreground mt-6 max-w-md mx-auto">
                                 Upload your resume and explore job opportunities from leading companies.
                             </p>
-                            <div className="mt-6">
-                                <Button asChild>
-                                    <Link href="/auth/sign-in" className="flex items-center">
-                                        Join Us
-                                        <ArrowRightIcon className="w-4 h-4 ml-2" />
-                                    </Link>
-                                </Button>
-                            </div>
                         </div>
                     </LampContainer>
                 </AnimationContainer>

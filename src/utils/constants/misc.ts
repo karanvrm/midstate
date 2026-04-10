@@ -78,66 +78,45 @@ export const FEATURES = [
 
 export const REVIEWS = [
     {
-        name: "Michael Smith",
-        username: "@michaelsmith",
-        avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+        name: "Rahul Sharma",
+        username: "@rahulsharma",
+        avatar: "https://randomuser.me/api/portraits/men/11.jpg",
         rating: 5,
-        review: "This tool is a lifesaver! Managing and tracking my links has never been easier. A must-have for anyone dealing with numerous links."
+        review: "The application process was clear and I started getting relevant job updates soon after uploading my resume. The platform made it much easier to track openings that matched my background."
     },
     {
-        name: "Emily Johnson",
-        username: "@emilyjohnson",
-        avatar: "https://randomuser.me/api/portraits/women/1.jpg",
+        name: "Priya Nair",
+        username: "@priyanair",
+        avatar: "https://randomuser.me/api/portraits/women/12.jpg",
         rating: 4,
-        review: "Very useful app! It has streamlined my workflow considerably. A few minor bugs, but overall a great experience."
+        review: "I had a professional experience overall. The job listings were relevant, and the support team responded on time when I needed clarification about an interview round."
     },
     {
-        name: "Daniel Williams",
-        username: "@danielwilliams",
-        avatar: "https://randomuser.me/api/portraits/men/2.jpg",
+        name: "Ankit Verma",
+        username: "@ankitverma",
+        avatar: "https://randomuser.me/api/portraits/men/13.jpg",
         rating: 5,
-        review: "I've been using this app daily for months. The insights and analytics it provides are invaluable. Highly recommend it!"
+        review: "What stood out to me was the quality of the hiring coordination. I was informed at each stage, and the recruiter shared practical details that helped me prepare better."
     },
     {
-        name: "Sophia Brown",
-        username: "@sophiabrown",
-        avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+        name: "Sneha Kulkarni",
+        username: "@snehakulkarni",
+        avatar: "https://randomuser.me/api/portraits/women/14.jpg",
         rating: 4,
-        review: "This app is fantastic! It offers everything I need to manage my links efficiently."
+        review: "The portal is easy to use and the roles are presented in a straightforward way. I would have liked a few more status updates, but the overall recruitment experience was smooth."
     },
     {
-        name: "James Taylor",
-        username: "@jamestaylor",
-        avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+        name: "Vikram Singh",
+        username: "@vikramsingh",
+        avatar: "https://randomuser.me/api/portraits/men/15.jpg",
         rating: 5,
-        review: "Absolutely love this app! It's intuitive and feature-rich. Has significantly improved how I manage and track links."
+        review: "I found openings here that were more relevant than on many larger job sites. The shortlisting process was quick, and the communication felt professional throughout."
     },
     {
-        name: "Olivia Martinez",
-        username: "@oliviamartinez",
-        avatar: "https://randomuser.me/api/portraits/women/3.jpg",
+        name: "Neha Agarwal",
+        username: "@nehaagarwal",
+        avatar: "https://randomuser.me/api/portraits/women/16.jpg",
         rating: 4,
-        review: "Great app with a lot of potential. It has already saved me a lot of time. Looking forward to future updates and improvements."
-    },
-    {
-        name: "William Garcia",
-        username: "@williamgarcia",
-        avatar: "https://randomuser.me/api/portraits/men/4.jpg",
-        rating: 5,
-        review: "This app is a game-changer for link management. It's easy to use, extremely powerful and highly recommended!"
-    },
-    {
-        name: "Mia Rodriguez",
-        username: "@miarodriguez",
-        avatar: "https://randomuser.me/api/portraits/women/4.jpg",
-        rating: 4,
-        review: "I've tried several link management tools, but this one stands out. It's simple, effective."
-    },
-    {
-        name: "Henry Lee",
-        username: "@henrylee",
-        avatar: "https://randomuser.me/api/portraits/men/5.jpg",
-        rating: 5,
-        review: "This app has transformed my workflow. Managing and analyzing links is now a breeze. I can't imagine working without it."
+        review: "This platform helped me apply to multiple roles without confusion. The experience felt organized, and I appreciated that the openings were from actual hiring companies."
     },
 ] as const;

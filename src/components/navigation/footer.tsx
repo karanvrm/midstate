@@ -88,16 +88,16 @@ const Footer = () => {
                         <AnimationContainer delay={0.4}>
                             <div className="">
                                 <h3 className="text-base font-medium text-white">
-                                    Resources
+                                    Contact Us
                                 </h3>
                                 <ul className="mt-4 text-sm text-muted-foreground">
                                     <li className="mt-2">
-                                        <Link href="/resources/blog" className="hover:text-foreground transition-all duration-300">
+                                        <Link href="/contact-us/blog" className="hover:text-foreground transition-all duration-300">
                                             Blog
                                         </Link>
                                     </li>
                                     <li className="mt-2">
-                                        <Link href="/resources/help" className="hover:text-foreground transition-all duration-300">
+                                        <Link href="/contact-us/help" className="hover:text-foreground transition-all duration-300">
                                             Support
                                         </Link>
                                     </li>

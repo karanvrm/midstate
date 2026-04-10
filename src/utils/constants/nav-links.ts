@@ -2,57 +2,57 @@ import { HelpCircleIcon, LineChartIcon, Link2Icon, LockIcon, NewspaperIcon, QrCo
 
 export const NAV_LINKS = [
     {
-        title: "Services",
-        href: "/features",
+        title: "About Us",
+        href: "/about-us",
         menu: [
             {
                 title: "Link Shortening",
                 tagline: "Shorten links and track their performance.",
-                href: "/features/link-shortening",
+                href: "/about-us/link-shortening",
                 icon: Link2Icon,
             },
             {
                 title: "Password Protection",
                 tagline: "Secure your links with a password.",
-                href: "/features/password-protection",
+                href: "/about-us/password-protection",
                 icon: LockIcon,
             },
             {
                 title: "Advanced Analytics",
                 tagline: "Gain insights into who is clicking your links.",
-                href: "/features/analytics",
+                href: "/about-us/analytics",
                 icon: LineChartIcon,
             },
             {
                 title: "Custom QR Codes",
                 tagline: "Use QR codes to reach your audience.",
-                href: "/features/qr-codes",
+                href: "/about-us/qr-codes",
                 icon: QrCodeIcon,
             },
         ],
     },
     {
-        title: "For Companies",
-        href: "/pricing",
+        title: "Jobs",
+        href: "/jobs",
     },
     {
-        title: "Partners",
-        href: "/enterprise",
+        title: "FAQs",
+        href: "/faqs",
     },
     {
-        title: "Careers",
-        href: "/resources",
+        title: "Contact Us",
+        href: "/contact-us",
         menu: [
             {
                 title: "Blog",
                 tagline: "Read articles on the latest trends in tech.",
-                href: "/resources/blog",
+                href: "/contact-us/blog",
                 icon: NewspaperIcon,
             },
             {
                 title: "Help",
                 tagline: "Get answers to your questions.",
-                href: "/resources/help",
+                href: "/contact-us/help",
                 icon: HelpCircleIcon,
             },
         ]

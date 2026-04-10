@@ -55,32 +55,14 @@ const Navbar = () => {
                             <NavigationMenuList>
                                 {NAV_LINKS.map((link) => (
                                     <NavigationMenuItem key={link.title}>
-                                        {link.menu ? (
+                                        {link.menu && link.title !== "About Us" ? (
                                             <>
                                                 <NavigationMenuTrigger>{link.title}</NavigationMenuTrigger>
                                                 <NavigationMenuContent>
                                                     <ul className={cn(
                                                         "grid gap-1 p-4 md:w-[400px] lg:w-[500px] rounded-xl",
-                                                        link.title === "Services" ? "lg:grid-cols-[.75fr_1fr]" : "lg:grid-cols-2"
+                                                        link.title === "About Us" ? "lg:grid-cols-[.75fr_1fr]" : "lg:grid-cols-2"
                                                     )}>
-                                                        {link.title === "Services" && (
-                                                            <li className="row-span-4 pr-2 relative rounded-lg overflow-hidden">
-                                                                <div className="absolute inset-0 !z-10 h-full w-[calc(100%-10px)] bg-[linear-gradient(to_right,rgb(38,38,38,0.5)_1px,transparent_1px),linear-gradient(to_bottom,rgb(38,38,38,0.5)_1px,transparent_1px)] bg-[size:1rem_1rem]"></div>
-                                                                <NavigationMenuLink asChild className="z-20 relative">
-                                                                    <Link
-                                                                        href="/"
-                                                                        className="flex h-full w-full select-none flex-col justify-end rounded-lg bg-gradient-to-b from-muted/50 to-muted p-4 no-underline outline-none focus:shadow-md"
-                                                                    >
-                                                                        <h6 className="mb-2 mt-4 text-lg font-medium">
-                                                                            All Services
-                                                                        </h6>
-                                                                        <p className="text-sm leading-tight text-muted-foreground">
-                                                                            Manage services, track performance, and more.
-                                                                        </p>
-                                                                    </Link>
-                                                                </NavigationMenuLink>
-                                                            </li>
-                                                        )}
                                                         {link.menu.map((menuItem) => (
                                                             <ListItem
                                                                 key={menuItem.title}
