@@ -1,13 +1,13 @@
 import { AnimationContainer, MaxWidthWrapper } from "@/components";
 import MagicCard from "@/components/ui/magic-card";
-import { MailIcon, PhoneCallIcon } from "lucide-react";
+import { MailIcon, MapPinIcon, PhoneCallIcon } from "lucide-react";
 
 const CONTACT_CARDS = [
     {
         title: "Call Us",
         description: "Speak with our team for quick guidance on openings and the application process.",
-        value: "+91 98765 43210",
-        href: "tel:+919876543210",
+        value: "+91 82948 97343",
+        href: "tel:+91 82948 97343",
         icon: PhoneCallIcon,
     },
     {
@@ -16,6 +16,12 @@ const CONTACT_CARDS = [
         value: "careers@midstateglobal.com",
         href: "mailto:careers@midstateglobal.com",
         icon: MailIcon,
+    },
+    {
+        title: "Our Locations",
+        description: "Connect with our team across key hiring locations for application support and recruitment guidance.",
+        value: "Gurugram: Crystal Plaza, Office No. 28, 1st Floor",
+        icon: MapPinIcon,
     },
 ];
 
@@ -34,7 +40,7 @@ const ContactUsIndexPage = () => {
                     </div>
                 </AnimationContainer>
 
-                <div className="mx-auto mt-12 grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="mx-auto mt-12 grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
                     {CONTACT_CARDS.map((card, index) => (
                         <AnimationContainer key={card.title} delay={0.1 * (index + 1)} className="w-full">
                             <MagicCard className="h-full max-w-none border-border/70 bg-neutral-950/80 p-0">
@@ -45,10 +51,10 @@ const ContactUsIndexPage = () => {
                                     <h2 className="mt-6 text-2xl font-medium text-foreground">
                                         {card.title}
                                     </h2>
-                                    <p className="mt-3 min-h-[72px] text-sm leading-6 text-muted-foreground">
+                                    <p className="mt-3 min-h-[96px] text-sm leading-6 text-muted-foreground">
                                         {card.description}
                                     </p>
-                                    <div className="mt-4 text-base font-medium text-foreground">
+                                    <div className="mt-4 text-base font-medium leading-7 text-foreground">
                                         {card.value}
                                     </div>
                                 </div>

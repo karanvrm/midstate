@@ -33,13 +33,13 @@ export const COMPANIES = [
 
 export const PROCESS = [
     {
-        title: "Upload Your Resume",
-        description: "Create your profile and upload your resume so companies can review your qualifications and experience.",
+        title: "Explore Careers",
+        description: "Go to the jobs page below and browse openings that match your skills, experience, and preferred role.",
         icon: FolderOpenIcon,
     },
     {
-        title: "Explore Careers",
-        description: "Browse job openings from our partner companies and find opportunities that match your skills and interests.",
+        title: "Fill the Required Details",
+        description: "Complete the required details carefully and submit the form so your application can be reviewed by the hiring team.",
         icon: WandSparklesIcon,
     },
     {

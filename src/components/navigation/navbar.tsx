@@ -1,6 +1,5 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -11,7 +10,7 @@ import {
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn, NAV_LINKS } from "@/utils";
-import { LucideIcon, ZapIcon } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import MaxWidthWrapper from "../global/max-width-wrapper";
@@ -88,18 +87,6 @@ const Navbar = () => {
                             </NavigationMenuList>
                         </NavigationMenu>
 
-                    </div>
-
-                    <div className="hidden lg:flex items-center">
-                        <div className="flex items-center gap-x-4">
-                            <Link href="/auth/sign-in" className={buttonVariants({ size: "sm", variant: "ghost" })}>
-                                Sign In
-                            </Link>
-                            <Link href="/auth/sign-up" className={buttonVariants({ size: "sm", })}>
-                                Get Started
-                                <ZapIcon className="size-3.5 ml-1.5 text-orange-500 fill-orange-500" />
-                            </Link>
-                        </div>
                     </div>
 
                     <MobileNavbar />

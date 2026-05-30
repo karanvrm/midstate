@@ -1,42 +1,42 @@
 export const FAQ = [
     {
         id: "item-1",
-        question: "Is it accessible?",
-        answer: "Yes. It adheres to the WAI-ARIA design pattern, ensuring accessibility for all users.",
+        question: "What kind of jobs do you offer?",
+        answer: "We help candidates connect with opportunities across BPO, KPO, LPO, customer support, IT support, sales, backend operations, and other business roles.",
     },
     {
         id: "item-2",
-        question: "What features does the software offer?",
-        answer: "Our link management software offers features like link shortening, click tracking, customizable branded links, and AI-powered suggestions.",
+        question: "Do I need prior experience to apply?",
+        answer: "Not always. Many companies hire freshers, while some roles may require previous experience depending on the position.",
     },
     {
         id: "item-3",
-        question: "How does the pricing work?",
-        answer: "We offer three plans: Free, Pro ($9/month), and Business ($49/month). Yearly subscriptions come with a discount.",
+        question: "What companies do you hire for?",
+        answer: "We work with a growing network of trusted companies across BPO, customer support, operations, and remote hiring sectors. Some of the organizations we support include TELUS, Transcom, WNS, Wishup, Concentrix, along with several other hiring partners and upcoming clients across multiple industries.",
     },
     {
         id: "item-4",
-        question: "Can I upgrade or downgrade my plan?",
-        answer: "Yes! You can easily upgrade or downgrade your plan at any time through your account settings.",
+        question: "Which locations do you hire for?",
+        answer: "We primarily hire for opportunities across Delhi NCR, including Gurugram and Noida, along with active hiring requirements in Pune.",
     },
     {
         id: "item-5",
-        question: "Is there customer support available?",
-        answer: "Absolutely! We provide community support for all users and priority support for Pro and Business plan subscribers.",
+        question: "What salary range can candidates expect?",
+        answer: "Salary packages depend on the role, company, experience level, and skill requirements. Current opportunities generally range from ₹10,000 to ₹1,00,000 per month, covering entry-level, experienced, and specialized positions across different sectors.",
     },
     {
         id: "item-6",
-        question: "Can I track my link clicks?",
-        answer: "Yes, our software allows you to track clicks on your links, providing insights into user engagement and demographics.",
+        question: "How long does the hiring process usually take?",
+        answer: "It depends on the company and role, but most processes are completed within a few days to a couple of weeks.",
     },
     {
         id: "item-7",
-        question: "Is there a mobile app available?",
-        answer: "Currently, we do not have a dedicated mobile app, but our web application is fully responsive and works well on mobile devices.",
+        question: "Do you guarantee job placement?",
+        answer: "No. We may support and guide candidates throughout the process, but final selection depends on company interviews and requirements.",
     },
     {
         id: "item-8",
-        question: "What payment methods do you accept?",
-        answer: "We accept various payment methods including credit cards, PayPal, and other secure payment options.",
+        question: "Is there any registration fee or hidden charge?",
+        answer: "ABSOLUTELY NO!! We do not charge candidates for applying or attending interviews. If anyone asks you to make a payment in our name for registration, interviews, or job placement, please inform us immediately.",
     },
 ];

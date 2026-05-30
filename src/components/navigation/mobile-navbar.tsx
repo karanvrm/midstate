@@ -6,7 +6,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Sheet,
     SheetClose,
@@ -41,17 +41,7 @@ const MobileNavbar = () => {
                         </Button>
                     </SheetClose>
                     <div className="flex flex-col items-start w-full py-2 mt-10">
-                        <div className="flex items-center justify-evenly w-full space-x-2">
-                            <>
-                                <Link href="/auth/sign-in" className={buttonVariants({ variant: "outline", className: "w-full" })}>
-                                    Sign In
-                                </Link>
-                                <Link href="/auth/sign-up" className={buttonVariants({ className: "w-full" })}>
-                                    Sign Up
-                                </Link>
-                            </>
-                        </div>
-                        <ul className="flex flex-col items-start w-full mt-6">
+                        <ul className="flex flex-col items-start w-full">
                             <Accordion type="single" collapsible className="!w-full">
                                 {NAV_LINKS.map((link) => (
                                     <AccordionItem key={link.title} value={link.title} className="last:border-none">
