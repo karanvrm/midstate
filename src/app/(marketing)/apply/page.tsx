@@ -1,7 +1,6 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-import React, { useState, useRef } from "react";
+import React, { Suspense, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import AnimationContainer from "@/components/global/animation-container";
 import { Button } from "@/components/ui/button";
@@ -19,7 +18,7 @@ const LOCATION_OPTIONS = [
   "Kolkata",
 ];
 
-const ApplyPage = () => {
+function ApplyPageContent() {
   const searchParams = useSearchParams();
   const jobTitle = searchParams.get("job") || "Position";
 
@@ -336,4 +335,10 @@ const ApplyPage = () => {
   );
 };
 
-export default ApplyPage;
+export default function ApplyPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ApplyPageContent />
+    </Suspense>
+  );
+}
