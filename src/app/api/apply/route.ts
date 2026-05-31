@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 const APPLICATION_RECIPIENT_EMAIL =
-  process.env.APPLICATION_RECIPIENT_EMAIL || "aditi@midstateglobalservices.com";
+  process.env.APPLICATION_RECIPIENT_EMAIL || "aditi.midstateglobalservices@gmail.com";
 
 const isPlaceholderValue = (value: string | undefined) =>
   !value || value.includes("your-") || value.includes("example.com");
