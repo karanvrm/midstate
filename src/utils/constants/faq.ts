@@ -32,7 +32,7 @@ export const FAQ = [
     {
         id: "item-7",
         question: "Do you guarantee job placement?",
-        answer: "No. We may support and guide candidates throughout the process, but final selection depends on company interviews and requirements.",
+        answer: "Our team is committed to supporting and guiding candidates throughout every stage of the hiring process. Selection outcomes are determined based on the company's interview performance, evaluation criteria, and specific role requirements.",
     },
     {
         id: "item-8",

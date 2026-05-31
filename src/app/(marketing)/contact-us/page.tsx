@@ -13,14 +13,14 @@ const CONTACT_CARDS = [
     {
         title: "Email Us",
         description: "Drop your resume on our email ID so that we can find the best suitable role for you.",
-        value: "careers@midstateglobal.com",
-        href: "mailto:careers@midstateglobal.com",
+        value: "info@midstateglobalservices.com",
+        href: "mailto:info@midstateglobalservices.com",
         icon: MailIcon,
     },
     {
         title: "Our Locations",
         description: "Connect with our team across key hiring locations for application support and recruitment guidance.",
-        value: "Gurugram: Crystal Plaza, Office No. 28, 1st Floor",
+        value: "1st floor, Paryavaran Complex, A-65, Saket, New Delhi, Delhi 110030",
         icon: MapPinIcon,
     },
 ];

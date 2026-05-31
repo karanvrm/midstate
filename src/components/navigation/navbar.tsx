@@ -11,11 +11,13 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn, NAV_LINKS } from "@/utils";
 import { LucideIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from 'react';
 import MaxWidthWrapper from "../global/max-width-wrapper";
 import MobileNavbar from "./mobile-navbar";
 import AnimationContainer from "../global/animation-container";
+import logo from "../../../Logo.webp";
 
 const Navbar = () => {
 
@@ -38,15 +40,23 @@ const Navbar = () => {
 
     return (
         <header className={cn(
-            "sticky top-0 inset-x-0 h-14 w-full border-b border-transparent z-[99999] select-none",
+            "sticky top-0 inset-x-0 h-20 w-full border-b border-transparent z-[99999] select-none",
             scroll && "border-background/80 bg-background/40 backdrop-blur-md"
         )}>
             <AnimationContainer reverse delay={0.1} className="size-full">
                 <MaxWidthWrapper className="flex items-center justify-between">
                     <div className="flex items-center space-x-12">
-                        <Link href="/#home">
-                            <span className="text-lg font-bold font-heading !leading-none">
-                                Midstate
+                        <Link href="/#home" className="flex w-28 flex-col items-center justify-center gap-0.5">
+                            <Image
+                                src={logo}
+                                alt="Midstate Global Services logo"
+                                width={72}
+                                height={72}
+                                className="h-12 w-24 object-contain"
+                                priority
+                            />
+                            <span className="w-full text-center text-[9px] font-bold font-heading uppercase leading-tight">
+                                Midstate Global Services
                             </span>
                         </Link>
 

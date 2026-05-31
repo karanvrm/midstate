@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { AnimationContainer, Icons } from "@/components"
+import Image from 'next/image';
+import { AnimationContainer } from "@/components"
 import { TextHoverEffect } from "@/components/ui/text-hover-effect"
 
 const Footer = () => {
@@ -13,7 +14,13 @@ const Footer = () => {
                 <AnimationContainer delay={0.1}>
                     <div className="flex flex-col items-start justify-start md:max-w-[200px]">
                         <div className="flex items-start">
-                            <Icons.logo className="w-7 h-7" />
+                            <Image
+                                src="/icons/Logo.png"
+                                alt="Midstate Global Services logo"
+                                width={64}
+                                height={64}
+                                className="h-12 w-12 object-contain"
+                            />
                         </div>
                         <p className="text-muted-foreground mt-4 text-sm text-start">
                             Connecting talented professionals with global career opportunities.

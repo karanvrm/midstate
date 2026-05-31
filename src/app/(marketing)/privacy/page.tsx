@@ -118,13 +118,6 @@ const Privacy = () => {
                     <li>Being contacted regarding job opportunities and recruitment updates</li>
                 </ul>
 
-                <h2 className="text-xl font-medium mt-12">
-                    Third-Party Hiring Process
-                </h2>
-
-                <p className="mt-8 text-muted-foreground">
-                    Interviews, assessments, hiring decisions, salary discussions, and final employment offers are handled directly by the hiring company for the respective role.
-                </p>
 
                 <p className="mt-4 text-muted-foreground">
                     Midstate Global Services serves as a recruitment support and candidate coordination partner.
@@ -157,12 +150,9 @@ const Privacy = () => {
                 </p>
 
                 <ul className="list-disc ml-8 mt-4 text-muted-foreground">
-                    <li>Access their personal information</li>
                     <li>Correct inaccurate information</li>
-                    <li>Request deletion of their data</li>
                     <li>Withdraw consent for future communication</li>
                 </ul>
-
                 <h2 className="text-xl font-medium mt-12">
                     Changes to This Privacy Policy
                 </h2>

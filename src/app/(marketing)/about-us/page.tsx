@@ -83,16 +83,9 @@ const TEAM_BLOCKS = [
 
 const AboutUsIndexPage = () => {
     return (
-        <div className="relative overflow-x-hidden bg-background">
-            <div className="pointer-events-none absolute left-1/2 top-0 h-[34rem] w-[58rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(79,70,229,0.24),rgba(124,58,237,0.12)_34%,transparent_68%)] blur-3xl" />
+        <div className="relative overflow-x-hidden">
             <MaxWidthWrapper className="pt-10 md:pt-16">
-                <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-neutral-950/80 px-6 py-16 shadow-[0_32px_120px_rgba(0,0,0,0.55)] backdrop-blur-xl md:px-10 md:py-20 lg:px-16">
-                    <div className="absolute -left-28 -top-32 h-96 w-96 rounded-full bg-violet-600/30 blur-3xl" />
-                    <div className="absolute -right-20 top-4 h-80 w-80 rounded-full bg-sky-500/20 blur-3xl" />
-                    <div className="absolute bottom-0 left-1/3 h-64 w-[34rem] rounded-full bg-indigo-500/15 blur-3xl" />
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(196,181,253,0.16),transparent_30%),radial-gradient(circle_at_80%_20%,rgba(56,189,248,0.14),transparent_26%),linear-gradient(180deg,rgba(255,255,255,0.08),transparent_44%)]" />
-                    <div className="absolute inset-0 bg-[url('/noise.webp')] opacity-[0.08]" />
-                    <div className="absolute inset-px rounded-[calc(2rem-1px)] border border-white/[0.06] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]" />
+                <div className="px-6 py-16 md:px-10 md:py-20 lg:px-16">
                     <div className="relative grid gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
                         <AboutReveal className="max-w-3xl">
                             <MagicBadge title="About Us" />
