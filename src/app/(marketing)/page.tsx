@@ -193,7 +193,7 @@ const HomePage = async () => {
                             What our users are saying
                         </h2>
                         <p className="mt-4 text-center lg:text-center text-lg text-muted-foreground max-w-lg">
-                            Here&apos;s what some of our users have to say about Linkify.
+                            Here&apos;s what some of our users have to say about Midstate Global Services.
                         </p>
                     </div>
                 </AnimationContainer>

@@ -62,22 +62,22 @@ const Footer = () => {
                         </h3>
                         <ul className="mt-4 text-sm text-muted-foreground">
                             <li className="">
-                                <Link href="http://facebook.com/midstateglobalservices" className="hover:text-foreground transition-all duration-300">
+                                <Link href="http://facebook.com/midstateglobalservices" target="_blank" rel="noopener noreferrer"className="hover:text-foreground transition-all duration-300">
                                     Facebook
                                 </Link>
                             </li>
                             <li className="mt-2">
-                                <Link href="https://www.instagram.com/midstateglobalservices/" className="hover:text-foreground transition-all duration-300">
+                                <Link href="https://www.instagram.com/midstateglobalservices/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-all duration-300">
                                     Instagram
                                 </Link>
                             </li>
                             <li className="mt-2">
-                                <Link href="https://www.youtube.com/@midstateglobalservices" className="hover:text-foreground transition-all duration-300">
+                                <Link href="https://www.youtube.com/@midstateglobalservices" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-all duration-300">
                                     YouTube
                                 </Link>
                             </li>
                             <li className="mt-2">
-                                <Link href="https://www.linkedin.com/company/midstateglobalservices/" className="hover:text-foreground transition-all duration-300">
+                                <Link href="https://www.linkedin.com/company/midstateglobalservices/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-all duration-300">
                                     LinkedIn
                                 </Link>
                             </li>
