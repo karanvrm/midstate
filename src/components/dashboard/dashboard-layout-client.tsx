@@ -415,7 +415,7 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Sign Out</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to sign out? You'll need to sign in again to access your dashboard.
+             Are you sure you want to sign out? You&apos;ll need to sign in again to access your dashboard.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-end gap-3">

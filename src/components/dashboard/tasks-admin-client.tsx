@@ -214,7 +214,7 @@ export function TasksAdminClient() {
         onClose={handleCloseModal}
         onSubmit={handleSubmitTask}
         staffMembers={staffMembers}
-        initialData={editingTask}
+        initialData={editingTask ?? undefined}
       />
     </div>
   );
