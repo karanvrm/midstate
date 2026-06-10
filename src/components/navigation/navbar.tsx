@@ -9,6 +9,7 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
 import { cn, NAV_LINKS } from "@/utils";
 import { LucideIcon } from "lucide-react";
 import Image from "next/image";
@@ -97,6 +98,15 @@ const Navbar = () => {
                             </NavigationMenuList>
                         </NavigationMenu>
 
+                    </div>
+
+                    <div className="hidden lg:flex items-center gap-2">
+                        <Button asChild variant="ghost">
+                            <Link href="/auth/sign-in">Login</Link>
+                        </Button>
+                        <Button asChild>
+                            <Link href="/auth/sign-up">Sign up</Link>
+                        </Button>
                     </div>
 
                     <MobileNavbar />

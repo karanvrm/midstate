@@ -1,5 +1,5 @@
+import Image from "next/image";
 import React from 'react'
-import { Icons } from "@/components";
 import { cn } from "@/utils";
 
 interface Props {
@@ -11,13 +11,31 @@ const Logo = ({ variant = "icon", className }: Props) => {
     return (
         <>
             {variant === "icon" ? (
-                <Icons.logo className={cn("w-8 h-8 transition-all", className)} />
+                <Image
+                    src="/icons/logo.png"
+                    alt="Midstate Global Services logo"
+                    width={40}
+                    height={40}
+                    className={cn("size-8 object-contain transition-all", className)}
+                    priority
+                />
             ) : variant === "text" ? (
-                <Icons.wordmark className={cn("w-auto h-5 transition-all", className)} />
+                <span className={cn("text-sm font-semibold leading-tight text-foreground transition-all", className)}>
+                    Midstate Global Services
+                </span>
             ) : (
                 <div className={cn("w-auto h-8 flex items-center space-x-2 transition-all", className)}>
-                    <Icons.logo className="w-8 h-8 transition-all" />
-                    <Icons.wordmark className="w-auto h-5 transition-all" />
+                    <Image
+                        src="/icons/logo.png"
+                        alt="Midstate Global Services logo"
+                        width={40}
+                        height={40}
+                        className="size-8 shrink-0 object-contain transition-all"
+                        priority
+                    />
+                    <span className="text-sm font-semibold leading-tight text-foreground">
+                        Midstate Global Services
+                    </span>
                 </div>
             )}
         </>

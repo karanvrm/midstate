@@ -1,28 +1,22 @@
-"use client"
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import React from 'react'
+export default async function DashboardPage() {
+    const session = await getServerSession(authOptions);
 
-const DashboardPage = () => {
+    if (!session?.user) {
+        redirect("/auth/sign-in");
+    }
 
-    const router = useRouter();
+    if (session.user.role === "OWNER") {
+        redirect("/dashboard/owner");
+    } else if (session.user.role === "ADMIN") {
+        redirect("/dashboard/owner/job-descriptions");
+    } else if (session.user.role === "STAFF") {
+        redirect("/dashboard/staff");
+    } else {
+        redirect("/dashboard/staff");
+    }
+}
 
-    return (
-        <div className="flex flex-col items-center justify-center h-screen">
-            <h1 className="text-xl font-medium">
-                Welcome!
-            </h1>
-            <p className="text-gray-500 mt-2">
-                This dashboard is currently running without Clerk authentication.
-            </p>
-            <div className="flex items-center justify-center gap-4 mt-4">
-                <Button onClick={() => router.push("/")} variant="outline">
-                    Back to home
-                </Button>
-            </div>
-        </div>
-    )
-};
-
-export default DashboardPage

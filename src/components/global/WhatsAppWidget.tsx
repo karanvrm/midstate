@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { X } from "lucide-react";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 import { cn } from "@/utils";
@@ -10,7 +11,12 @@ const whatsappUrl = "https://wa.me/918294897343";
 const whatsappIcon = "/whatsapp.png";
 
 export default function WhatsAppWidget() {
+    const { status } = useSession();
     const [isOpen, setIsOpen] = useState(false);
+
+    if (status !== "unauthenticated") {
+        return null;
+    }
 
     const openWhatsApp = () => {
         window.open(whatsappUrl, "_blank", "noopener,noreferrer");

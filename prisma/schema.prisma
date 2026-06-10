@@ -8,27 +8,99 @@ datasource db {
 }
 
 enum Role {
+  OWNER
   ADMIN
   STAFF
 }
 
-enum ApprovalStatus {
+enum Status {
   PENDING
-  APPROVED
+  ACTIVE
   REJECTED
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String?
-  email     String   @unique
-  password  String   // since Clerk is removed
+  id           String @id @default(cuid())
+  name         String
+  email        String @unique
+  phoneNumber  String
+  passwordHash String
 
-  role      Role     @default(STAFF)
-  status    ApprovalStatus @default(PENDING)
+  role   Role   @default(STAFF)
+  status Status @default(PENDING)
 
-  image     String?
+  taskAssignments TaskAssignment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model JobDescriptionSheet {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AttendanceSheet {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Briefing {
+  id           String         @id @default(cuid())
+  companyName  String
+  briefingText String
+  links        BriefingLink[]
+  files        BriefingFile[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model BriefingLink {
+  id         String   @id @default(cuid())
+  briefingId String
+  title      String
+  url        String
+  briefing   Briefing @relation(fields: [briefingId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([briefingId])
+}
+
+model BriefingFile {
+  id         String   @id @default(cuid())
+  briefingId String
+  fileName   String
+  fileUrl    String
+  briefing   Briefing @relation(fields: [briefingId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([briefingId])
+}
+
+model Task {
+  id                   String           @id @default(cuid())
+  name                 String
+  googleSheetUrl       String
+  assignedStaffMembers TaskAssignment[]
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+}
+
+model TaskAssignment {
+  id        String   @id @default(cuid())
+  taskId    String
+  userId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([taskId, userId])
 }

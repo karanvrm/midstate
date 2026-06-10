@@ -2,7 +2,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { cn } from "@/utils";
-import { ArrowRightIcon, CalendarIcon, Link2Icon, SearchIcon, WaypointsIcon } from "lucide-react";
+import { ArrowRightIcon, BriefcaseBusinessIcon, CalendarIcon, SearchIcon, WaypointsIcon } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
@@ -12,9 +12,9 @@ import { Label } from "./label";
 
 export const CARDS = [
     {
-        Icon: Link2Icon,
-        name: "Shorten links",
-        description: "Create short links that are easy to remember and share.",
+        Icon: BriefcaseBusinessIcon,
+        name: "Career profiles",
+        description: "Create candidate profiles that are easy to review and approve.",
         href: "#",
         cta: "Learn more",
         className: "col-span-3 lg:col-span-1",
@@ -22,19 +22,19 @@ export const CARDS = [
             <Card className="absolute top-10 left-10 origin-top rounded-none rounded-tl-md transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_0%,#000_100%)] group-hover:scale-105 border border-border border-r-0">
                 <CardHeader>
                     <CardTitle>
-                        Create short links
+                        Create a career profile
                     </CardTitle>
                     <CardDescription>
-                        Create short links that are easy to remember and share.
+                        Create a profile that helps recruiters understand your goals.
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="-mt-4">
                     <Label>
-                        Paste your link
+                        Desired role
                     </Label>
                     <Input
                         type="text"
-                        placeholder="Paste your link here..."
+                        placeholder="Operations Manager"
                         className="w-full focus-visible:ring-0 focus-visible:ring-transparent"
                     />
                 </CardContent>
@@ -43,8 +43,8 @@ export const CARDS = [
     },
     {
         Icon: SearchIcon,
-        name: "Search your links",
-        description: "Quickly find the links you need with AI-powered search.",
+        name: "Search candidates",
+        description: "Quickly find candidate profiles and opportunities.",
         href: "#",
         cta: "Learn more",
         className: "col-span-3 lg:col-span-2",
@@ -52,20 +52,20 @@ export const CARDS = [
             <Command className="absolute right-10 top-10 w-[70%] origin-to translate-x-0 border border-border transition-all duration-300 ease-out [mask-image:linear-gradient(to_top,transparent_40%,#000_100%)] group-hover:-translate-x-10 p-2">
                 <Input placeholder="Type to search..." />
                 <div className="mt-1 cursor-pointer">
-                    <div className="px-4 py-2 hover:bg-muted rounded-md">linkify.io/hdf00c</div>
-                    <div className="px-4 py-2 hover:bg-muted rounded-md">linkify.io/sdv0n0</div>
-                    <div className="px-4 py-2 hover:bg-muted rounded-md">linkify.io/03gndo</div>
-                    <div className="px-4 py-2 hover:bg-muted rounded-md">linkify.io/09vmmw</div>
-                    <div className="px-4 py-2 hover:bg-muted rounded-md">linkify.io/s09vws</div>
-                    <div className="px-4 py-2 hover:bg-muted rounded-md">linkify.io/sd8fv5</div>
+                    <div className="px-4 py-2 hover:bg-muted rounded-md">midstate/candidates/operations</div>
+                    <div className="px-4 py-2 hover:bg-muted rounded-md">midstate/jobs/global-support</div>
+                    <div className="px-4 py-2 hover:bg-muted rounded-md">midstate/candidates/finance</div>
+                    <div className="px-4 py-2 hover:bg-muted rounded-md">midstate/jobs/bfsi</div>
+                    <div className="px-4 py-2 hover:bg-muted rounded-md">midstate/candidates/retail</div>
+                    <div className="px-4 py-2 hover:bg-muted rounded-md">midstate/jobs/technology</div>
                 </div>
             </Command>
         ),
     },
     {
         Icon: WaypointsIcon,
-        name: "Connect your apps",
-        description: "Integrate with your favorite apps and services.",
+        name: "Connect hiring teams",
+        description: "Coordinate candidate movement across teams and services.",
         href: "#",
         cta: "Learn more",
         className: "col-span-3 lg:col-span-2 max-w-full overflow-hidden",
@@ -76,7 +76,7 @@ export const CARDS = [
     {
         Icon: CalendarIcon,
         name: "Calendar",
-        description: "Keep track of your links with our calendar view.",
+        description: "Keep track of interviews and hiring milestones.",
         className: "col-span-3 lg:col-span-1",
         href: "#",
         cta: "Learn more",

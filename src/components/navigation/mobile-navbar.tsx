@@ -78,6 +78,18 @@ const MobileNavbar = () => {
                                 ))}
                             </Accordion>
                         </ul>
+                        <div className="grid w-full grid-cols-2 gap-3 pt-6">
+                            <Button asChild variant="outline">
+                                <Link href="/auth/sign-in" onClick={handleClose}>
+                                    Login
+                                </Link>
+                            </Button>
+                            <Button asChild>
+                                <Link href="/auth/sign-up" onClick={handleClose}>
+                                    Sign up
+                                </Link>
+                            </Button>
+                        </div>
                     </div>
                 </SheetContent>
             </Sheet>

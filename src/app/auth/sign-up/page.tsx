@@ -1,46 +1,16 @@
-import { Icons } from "@/components";
-import Link from "next/link";
+import AuthShell from "@/components/auth/auth-shell";
+import { SignUpForm } from "@/components";
 
 const SignUpPage = () => {
     return (
-        <div className="flex flex-col items-start max-w-sm mx-auto h-dvh overflow-hidden pt-4 md:pt-20">
-            <div className="flex items-center w-full py-8 border-b border-border/80">
-                <Link href="/#home" className="flex items-center gap-x-2">
-                    <Icons.logo className="w-6 h-6" />
-                    <h1 className="text-lg font-medium">
-                        linkify
-                    </h1>
-                </Link>
-            </div>
-
-            <div className="py-8">
-                <h2 className="text-2xl font-semibold">Create an account</h2>
-                <p className="mt-3 text-sm text-muted-foreground">
-                    Authentication has been temporarily removed from this app.
-                </p>
-            </div>
-
-            <div className="flex flex-col items-start w-full">
-                <p className="text-sm text-muted-foreground">
-                    By signing in, you agree to our{" "}
-                    <Link href="/terms" className="text-primary">
-                        Terms of Service{" "}
-                    </Link>
-                    and{" "}
-                    <Link href="/privacy" className="text-primary">
-                        Privacy Policy
-                    </Link>
-                </p>
-            </div>
-            <div className="flex items-start mt-auto border-t border-border/80 py-6 w-full">
-                <p className="text-sm text-muted-foreground">
-                    Already have an account?{" "}
-                    <Link href="/auth/sign-in" className="text-primary">
-                        Sign in
-                    </Link>
-                </p>
-            </div>
-        </div>
+        <AuthShell
+            eyebrow="Join the team"
+            title="Create account"
+            description="Create a staff account request. An administrator will review your registration before portal access is activated. False requests will be rejected and blocked from future attempts."
+            className="items-start lg:items-center"
+        >
+            <SignUpForm />
+        </AuthShell>
     )
 };
 

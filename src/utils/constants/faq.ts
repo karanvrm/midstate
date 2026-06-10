@@ -17,12 +17,12 @@ export const FAQ = [
     {
         id: "item-4",
         question: "Which locations do you hire for?",
-        answer: "We primarily hire for opportunities across Delhi NCR, including Gurugram and Noida, along with active hiring requirements in Pune.",
+        answer: "We primarily hire for opportunities across Delhi NCR, including Gurugram and Noida, along with active hiring accross PAN India.",
     },
     {
         id: "item-5",
         question: "What salary range can candidates expect?",
-        answer: "Salary packages depend on the role, company, experience level, and skill requirements. Current opportunities generally range from ₹10,000 to ₹1,00,000 per month, covering entry-level, experienced, and specialized positions across different sectors.",
+        answer: "Salary packages depend on the role, company, experience level, and skill requirements. Current opportunities generally range from ₹20,000 to ₹1,00,000 per month, covering entry-level, experienced, and specialized positions across different sectors.",
     },
     {
         id: "item-6",
