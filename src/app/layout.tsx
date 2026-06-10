@@ -1,5 +1,6 @@
 import { Providers, WhatsAppWidget } from "@/components";
 import { Toaster } from "@/components/ui/sonner";
+// @ts-ignore: side-effect import for global styles
 import "@/styles/globals.css";
 import { aeonik, cn, generateMetadata, inter } from "@/utils";
 
