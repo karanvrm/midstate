@@ -448,7 +448,7 @@ const StatusChangeDropdown = ({ user, isLoading, onStatusChange }: StatusChangeD
         <AlertDialogContent className="border-border/80 bg-neutral-950">
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Change {user.name}'s status to{" "}
+              Change {user.name}&apos;s status to{" "}
               {selectedNewStatus ? statuses.find((s) => s.value === selectedNewStatus)?.label : ""}?
             </AlertDialogTitle>
             <AlertDialogDescription>
