@@ -4,7 +4,7 @@ import { SignInForm } from "@/components";
 const SignInPage = () => {
     return (
         <AuthShell
-            eyebrow="Candidate access"
+            eyebrow="Team Portal"
             title="Sign in"
             description="Sign in to continue toward curated opportunities, profile updates, and administrator-approved portal access."
         >
