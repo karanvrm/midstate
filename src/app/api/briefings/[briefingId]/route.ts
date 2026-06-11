@@ -7,12 +7,12 @@ import { z } from "zod";
 
 const briefingLinkSchema = z.object({
   title: z.string().trim().min(1, "Link title is required."),
-  url: z.string().trim().url("Enter a valid link URL."),
+  url: z.string().trim().min(1,"Enter a valid link URL."),
 });
 
 const briefingFileSchema = z.object({
   fileName: z.string().trim().min(1, "File name is required."),
-  fileUrl: z.string().trim().url("Enter a valid file URL."),
+  fileUrl: z.string().trim().min(1, "Enter a valid file URL."),
 });
 
 const updateBriefingSchema = z
