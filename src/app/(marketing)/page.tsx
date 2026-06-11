@@ -1,4 +1,4 @@
-import { AnimationContainer, MaxWidthWrapper } from "@/components";
+import { AnimationContainer, MaxWidthWrapper, StatsBar } from "@/components";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,6 +73,9 @@ const HomePage = async () => {
                 </div>
             </MaxWidthWrapper >
             {/* Trusted-by section removed per request */}
+
+            {/* Statistics Section */}
+            <StatsBar />
 
             {/* Features Section */}
             <MaxWidthWrapper className="pt-10">

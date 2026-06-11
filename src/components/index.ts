@@ -8,6 +8,7 @@ import { Icons } from "./global/icons";
 import MaxWidthWrapper from "./global/max-width-wrapper";
 import AnimationContainer from "./global/animation-container";
 import WhatsAppWidget from "./global/WhatsAppWidget";
+import StatsBar from "./global/stats-bar";
 // navigation
 import Navbar from "./navigation/navbar";
 import Footer from "./navigation/footer";
@@ -35,6 +36,7 @@ export {
     MaxWidthWrapper,
     AnimationContainer,
     WhatsAppWidget,
+    StatsBar,
     Navbar,
     Footer,
 
