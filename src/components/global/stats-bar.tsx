@@ -14,7 +14,7 @@ const Statistic = ({ value, label, id }: StatisticProps) => {
 
   return (
     <div id={`count-up-${value}`} className="flex flex-col items-center justify-center gap-2 py-8 px-4">
-      <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-transparent bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text">
+      <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text">
         {count}
         <span className="text-foreground">+</span>
       </div>
