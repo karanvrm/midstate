@@ -6,7 +6,7 @@ import { z } from "zod";
 
 const createSheetSchema = z.object({
   name: z.string().trim().min(1, "Sheet name is required."),
-  url: z.string().trim().url("Enter a valid Google Sheet URL."),
+  url: z.string().trim().url("Enter a valid Google Sheet URL.").optional().or(z.literal('')),
 });
 
 const canViewSheets = (role?: string, status?: string) =>
@@ -14,6 +14,11 @@ const canViewSheets = (role?: string, status?: string) =>
 
 const canManageSheets = (role?: string, status?: string) =>
   status === "ACTIVE" && (role === "OWNER" || role === "ADMIN");
+
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -61,16 +66,66 @@ export async function POST(request: Request) {
   }
 
   try {
-    const sheet = await prisma.attendanceSheet.create({
-      data: parsed.data,
+    const existingSheet = await prisma.attendanceSheet.findUnique({
+      where: { name: parsed.data.name }
+    });
+
+    if (existingSheet) {
+      return NextResponse.json({ error: "An attendance sheet for this month already exists." }, { status: 400 });
+    }
+
+    const [monthStr, yearStr] = parsed.data.name.split(" ");
+    const monthIndex = MONTHS.indexOf(monthStr);
+    const year = parseInt(yearStr, 10);
+
+    if (monthIndex === -1 || isNaN(year)) {
+      return NextResponse.json({ error: "Invalid sheet name format. Must be 'Month Year'." }, { status: 400 });
+    }
+
+    const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+
+    const staffMembers = await prisma.user.findMany({
+      where: {
+        status: "ACTIVE",
+        role: "STAFF",
+      },
+    });
+
+    const result = await prisma.$transaction(async (tx) => {
+      const sheet = await tx.attendanceSheet.create({
+        data: {
+          name: parsed.data.name,
+          url: parsed.data.url || null,
+        },
+      });
+
+      const recordsData = [];
+      for (const staff of staffMembers) {
+        for (let day = 1; day <= daysInMonth; day++) {
+          recordsData.push({
+            sheetId: sheet.id,
+            userId: staff.id,
+            day,
+            status: "-",
+          });
+        }
+      }
+
+      if (recordsData.length > 0) {
+        await tx.attendanceRecord.createMany({
+          data: recordsData,
+        });
+      }
+
+      return sheet;
     });
 
     return NextResponse.json(
       {
         sheet: {
-          ...sheet,
-          createdAt: sheet.createdAt.toISOString(),
-          updatedAt: sheet.updatedAt.toISOString(),
+          ...result,
+          createdAt: result.createdAt.toISOString(),
+          updatedAt: result.updatedAt.toISOString(),
         },
         message: "Sheet saved successfully.",
       },

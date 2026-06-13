@@ -29,7 +29,8 @@ model User {
   role   Role   @default(STAFF)
   status Status @default(PENDING)
 
-  taskAssignments TaskAssignment[]
+  taskAssignments   TaskAssignment[]
+  attendanceRecords AttendanceRecord[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -44,11 +45,26 @@ model JobDescriptionSheet {
 }
 
 model AttendanceSheet {
-  id        String   @id @default(cuid())
-  name      String
-  url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String             @id @default(cuid())
+  name      String             @unique
+  url       String?
+  records   AttendanceRecord[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model AttendanceRecord {
+  id        String          @id @default(cuid())
+  sheetId   String
+  sheet     AttendanceSheet @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  day       Int
+  status    String          @default("-")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  @@unique([sheetId, userId, day])
 }
 
 model Briefing {

@@ -245,7 +245,7 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
       </aside>
 
       {/* Main Content Container */}
-      <div className="flex flex-1 flex-col lg:pl-64">
+      <div className="flex flex-1 flex-col min-w-0 lg:pl-64">
         {/* Top Navbar */}
         <header className="sticky top-0 z-30 flex h-20 items-center justify-between border-b border-border/70 bg-background/40 px-4 backdrop-blur-md md:px-8">
           <div className="flex items-center gap-4">
@@ -321,7 +321,7 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
         </header>
 
         {/* Page Children */}
-        <main className="flex-1 p-6 md:p-8">
+        <main className="flex-1 min-w-0 p-6 md:p-8">
           {children}
         </main>
       </div>

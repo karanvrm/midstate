@@ -58,3 +58,34 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     );
   }
 }
+
+export async function DELETE(request: Request, { params }: RouteContext) {
+  const session = await getServerSession(authOptions);
+
+  if (!canManageSheets(session?.user?.role, session?.user?.status)) {
+    return NextResponse.json({ error: "Admin access required." }, { status: 403 });
+  }
+
+  try {
+    const sheet = await prisma.attendanceSheet.findUnique({
+      where: { id: params.sheetId },
+    });
+
+    if (!sheet) {
+      return NextResponse.json({ error: "Sheet not found." }, { status: 404 });
+    }
+
+    await prisma.$transaction([
+      prisma.attendanceRecord.deleteMany({ where: { sheetId: params.sheetId } }),
+      prisma.attendanceSheet.delete({ where: { id: params.sheetId } })
+    ]);
+
+    return NextResponse.json({ message: "Sheet deleted successfully." });
+  } catch (error) {
+    console.error("Unable to delete attendance sheet.", error);
+    return NextResponse.json(
+      { error: "Unable to connect to the database. Please try again shortly." },
+      { status: 503 },
+    );
+  }
+}

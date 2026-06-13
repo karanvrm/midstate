@@ -17,7 +17,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/utils";
 import {
@@ -25,8 +41,8 @@ import {
   ArrowUpRightIcon,
   CalendarIcon,
   Loader2Icon,
-  PencilIcon,
   PlusIcon,
+  Trash2Icon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -54,21 +70,28 @@ const isValidUrl = (value: string) => {
   }
 };
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
+const currentYear = new Date().getFullYear();
+const YEARS = Array.from({ length: 21 }, (_, i) => currentYear - 10 + i);
+
 const AttendancesClient = ({ sheets, canManage, loadError }: AttendancesClientProps) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [editingSheet, setEditingSheet] = useState<AttendanceSheet | null>(null);
-  const [editUrl, setEditUrl] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [editError, setEditError] = useState<string | null>(null);
+  const [month, setMonth] = useState("");
+  const [year, setYear] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  const [sheetToDelete, setSheetToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const resetForm = () => {
-    setName("");
-    setUrl("");
+    setMonth("");
+    setYear("");
     setError(null);
   };
 
@@ -84,25 +107,15 @@ const AttendancesClient = ({ sheets, canManage, loadError }: AttendancesClientPr
     event.preventDefault();
     setError(null);
 
-    const trimmedName = name.trim();
-    const trimmedUrl = url.trim();
-
-    if (!trimmedName) {
-      setError("Sheet name is required.");
-      return;
-    }
-
-    if (!trimmedUrl) {
-      setError("Google Sheet URL is required.");
-      return;
-    }
-
-    if (!isValidUrl(trimmedUrl)) {
-      setError("Enter a valid URL.");
+    if (!month || !year) {
+      setError("Please select both month and year.");
       return;
     }
 
     setIsSaving(true);
+
+    const sheetName = `${month} ${year}`;
+    const dummyUrl = `https://example.com/sheet-${month.toLowerCase()}-${year}`;
 
     let response: Response;
     let data: { error?: string; message?: string } = {};
@@ -114,8 +127,8 @@ const AttendancesClient = ({ sheets, canManage, loadError }: AttendancesClientPr
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: trimmedName,
-          url: trimmedUrl,
+          name: sheetName,
+          url: dummyUrl,
         }),
       });
 
@@ -138,71 +151,28 @@ const AttendancesClient = ({ sheets, canManage, loadError }: AttendancesClientPr
     router.refresh();
   };
 
-  const handleEditOpenChange = (open: boolean) => {
-    if (!open) {
-      setEditingSheet(null);
-      setEditUrl("");
-      setEditError(null);
-    }
-  };
-
-  const openEditDialog = (sheet: AttendanceSheet) => {
-    setEditingSheet(sheet);
-    setEditUrl(sheet.url);
-    setEditError(null);
-  };
-
-  const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!editingSheet) {
-      return;
-    }
-
-    const trimmedUrl = editUrl.trim();
-    setEditError(null);
-
-    if (!trimmedUrl) {
-      setEditError("Google Sheet URL is required.");
-      return;
-    }
-
-    if (!isValidUrl(trimmedUrl)) {
-      setEditError("Enter a valid URL.");
-      return;
-    }
-
-    setIsUpdating(true);
-
-    let response: Response;
-    let data: { error?: string; message?: string } = {};
+  const handleDelete = async () => {
+    if (!sheetToDelete) return;
+    setIsDeleting(true);
 
     try {
-      response = await fetch(`/api/attendance-sheets/${editingSheet.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url: trimmedUrl }),
+      const response = await fetch(`/api/attendance-sheets/${sheetToDelete}`, {
+        method: "DELETE",
       });
 
-      data = await response.json().catch(() => ({}));
-    } catch {
-      setIsUpdating(false);
-      setEditError("Unable to reach the server. Please try again.");
-      return;
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to delete sheet.");
+      }
+
+      toast.success("Sheet deleted successfully.");
+      setSheetToDelete(null);
+      router.refresh();
+    } catch (err: any) {
+      toast.error(err.message || "An error occurred.");
+    } finally {
+      setIsDeleting(false);
     }
-
-    setIsUpdating(false);
-
-    if (!response.ok) {
-      setEditError(data.error ?? "Unable to update this sheet link.");
-      return;
-    }
-
-    toast.success(data.message ?? "Sheet link updated successfully.");
-    handleEditOpenChange(false);
-    router.refresh();
   };
 
   return (
@@ -270,35 +240,30 @@ const AttendancesClient = ({ sheets, canManage, loadError }: AttendancesClientPr
               </CardHeader>
               <CardContent className="relative flex items-center justify-between gap-4 pt-5">
                 {canManage ? (
-                  <div className="text-xs text-muted-foreground">
-                    
-                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    className="gap-2 text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                    onClick={() => setSheetToDelete(sheet.id)}
+                  >
+                    <Trash2Icon className="size-4" />
+                    Delete
+                  </Button>
                 ) : (
                   <div className="text-xs text-muted-foreground">
                     Google Sheet
                   </div>
                 )}
                 <div className="flex shrink-0 items-center gap-2">
-                  {canManage ? (
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      className="gap-2 border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground"
-                      onClick={() => openEditDialog(sheet)}
-                    >
-                      <PencilIcon className="size-3.5" />
-                      Edit Link
-                    </Button>
-                  ) : null}
                   <Button
                     type="button"
                     size="sm"
                     variant="outline"
                     className="gap-2 border-violet-400/30 bg-violet-400/10 text-violet-100 hover:bg-violet-400/20 hover:text-white"
-                    onClick={() => window.open(sheet.url, "_blank")}
+                    onClick={() => router.push(`/dashboard/owner/attendance/${sheet.id}`)}
                   >
-                    Open Sheet
+                    Open
                     <ArrowUpRightIcon className="size-3.5" />
                   </Button>
                 </div>
@@ -332,26 +297,34 @@ const AttendancesClient = ({ sheets, canManage, loadError }: AttendancesClientPr
 
             <div className="mt-6 space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="sheet-name">Sheet Name</Label>
-                <Input
-                  id="sheet-name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  placeholder="June 2024 Attendance"
-                  className="border-white/10 bg-white/[0.03]"
-                  disabled={isSaving}
-                />
+                <Label>Month</Label>
+                <Select value={month} onValueChange={setMonth} disabled={isSaving}>
+                  <SelectTrigger className="border-white/10 bg-white/[0.03]">
+                    <SelectValue placeholder="Select month" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MONTHS.map((m) => (
+                      <SelectItem key={m} value={m}>
+                         {m}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="sheet-url">Google Sheet URL</Label>
-                <Input
-                  id="sheet-url"
-                  value={url}
-                  onChange={(event) => setUrl(event.target.value)}
-                  placeholder="https://docs.google.com/spreadsheets/d/..."
-                  className="border-white/10 bg-white/[0.03]"
-                  disabled={isSaving}
-                />
+                <Label>Year</Label>
+                <Select value={year} onValueChange={setYear} disabled={isSaving}>
+                  <SelectTrigger className="border-white/10 bg-white/[0.03]">
+                    <SelectValue placeholder="Select year" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {YEARS.map((y) => (
+                      <SelectItem key={y} value={y.toString()}>
+                        {y}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
               {error ? (
                 <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-red-200">
@@ -378,52 +351,28 @@ const AttendancesClient = ({ sheets, canManage, loadError }: AttendancesClientPr
         </DialogContent>
       </Dialog>
 
-      <Dialog open={Boolean(editingSheet)} onOpenChange={handleEditOpenChange}>
-        <DialogContent className="border-border/80 bg-neutral-950 sm:rounded-2xl">
-          <form onSubmit={handleUpdate}>
-            <DialogHeader>
-              <DialogTitle>Edit Sheet Link</DialogTitle>
-              <DialogDescription>
-                Update the Google Sheet URL for {editingSheet?.name}.
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="mt-6 space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="edit-sheet-url">Google Sheet URL</Label>
-                <Input
-                  id="edit-sheet-url"
-                  value={editUrl}
-                  onChange={(event) => setEditUrl(event.target.value)}
-                  placeholder="https://docs.google.com/spreadsheets/d/..."
-                  className="border-white/10 bg-white/[0.03]"
-                  disabled={isUpdating}
-                />
-              </div>
-              {editError ? (
-                <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-red-200">
-                  {editError}
-                </div>
-              ) : null}
-            </div>
-
-            <DialogFooter className="mt-6 gap-2 sm:gap-0">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleEditOpenChange(false)}
-                disabled={isUpdating}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isUpdating} className={cn("gap-2")}>
-                {isUpdating ? <Loader2Icon className="size-4 animate-spin" /> : null}
-                Update Link
-              </Button>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+      <AlertDialog open={!!sheetToDelete} onOpenChange={(open) => !open && setSheetToDelete(null)}>
+        <AlertDialogContent className="border-border/80 bg-neutral-950 sm:rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete this attendance sheet and remove all associated daily records. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="gap-2 bg-red-600 hover:bg-red-700"
+            >
+              {isDeleting ? <Loader2Icon className="size-4 animate-spin" /> : null}
+              Delete
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
