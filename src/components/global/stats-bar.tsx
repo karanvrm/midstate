@@ -10,7 +10,7 @@ interface StatisticProps {
 }
 
 const Statistic = ({ value, label, id }: StatisticProps) => {
-  const count = useCountUp({ end: value, duration: 0.6, start: 0 });
+  const count = useCountUp({ end: value, duration: 1, start: 0 });
 
   return (
     <div id={`count-up-${value}`} className="flex flex-col items-center justify-center gap-2 py-8 px-4">
@@ -30,7 +30,7 @@ export const StatsBar = () => {
     { value: 500, label: "Placements", id: "placements" },
     { value: 10, label: "Clients", id: "clients" },
     { value: 8, label: "Cities", id: "cities" },
-    { value: 50, label: "Open Roles Monthly", id: "roles" },
+    { value: 20, label: "Designations", id: "roles" },
   ];
 
   return (
