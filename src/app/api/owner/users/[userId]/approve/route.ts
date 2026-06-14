@@ -45,7 +45,7 @@ export async function PATCH(_request: Request, { params }: RouteContext) {
 
   await prisma.user.update({
     where: { id: params.userId },
-    data: { status: "ACTIVE" },
+    data: { status: "ACTIVE", activatedAt: new Date() },
   });
 
   return NextResponse.json({ message: "User approved successfully." });

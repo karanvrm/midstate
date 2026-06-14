@@ -24,9 +24,24 @@ const OwnerAttendanceSheetPage = async ({ params }: PageProps) => {
   }
 
   const sheetId = params.id;
-  
+
+  type AttendanceRecordWithUser = {
+    id: string;
+    sheetId: string;
+    userId: string;
+    day: number;
+    status: string;
+    createdAt: string;
+    updatedAt: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+    };
+  };
+
   let sheet = null;
-  let records = [];
+  let records: AttendanceRecordWithUser[] = [];
   let loadError: string | undefined;
 
   const MONTHS = [
@@ -43,26 +58,45 @@ const OwnerAttendanceSheetPage = async ({ params }: PageProps) => {
       redirect("/dashboard/owner/attendance");
     }
 
-    // Sync active staff members
-    const activeStaff = await prisma.user.findMany({
-      where: { status: "ACTIVE", role: "STAFF" },
-      select: { id: true },
-    });
+    // Sync active staff members — only add to sheets for their activation month or later
+    const [monthStr, yearStr] = sheet.name.split(" ");
+    const monthIndex = MONTHS.indexOf(monthStr);
+    const year = parseInt(yearStr, 10);
 
-    const existingUserIds = await prisma.attendanceRecord.groupBy({
-      by: ["userId"],
-      where: { sheetId },
-    });
+    if (monthIndex !== -1 && !isNaN(year)) {
+      const activeStaff = await prisma.user.findMany({
+        where: { status: "ACTIVE", role: "STAFF" },
+        select: { id: true, activatedAt: true },
+      });
 
-    const existingUserIdsSet = new Set(existingUserIds.map((r) => r.userId));
-    const missingStaffIds = activeStaff.map((s) => s.id).filter((id) => !existingUserIdsSet.has(id));
+      const existingUserIds = await prisma.attendanceRecord.groupBy({
+        by: ["userId"],
+        where: { sheetId },
+      });
 
-    if (missingStaffIds.length > 0) {
-      const [monthStr, yearStr] = sheet.name.split(" ");
-      const monthIndex = MONTHS.indexOf(monthStr);
-      const year = parseInt(yearStr, 10);
-      
-      if (monthIndex !== -1 && !isNaN(year)) {
+      const existingUserIdsSet = new Set(existingUserIds.map((r) => r.userId));
+
+      // Filter to staff who are missing from this sheet AND were activated
+      // in the sheet's month or earlier (not after the sheet's month)
+      const missingStaffIds = activeStaff
+        .filter((s) => {
+          if (existingUserIdsSet.has(s.id)) return false;
+
+          // If no activatedAt (legacy users), include them in all sheets
+          if (!s.activatedAt) return true;
+
+          const activatedYear = s.activatedAt.getFullYear();
+          const activatedMonth = s.activatedAt.getMonth(); // 0-indexed
+
+          // Include if the sheet's month/year is >= the activation month/year
+          if (year > activatedYear) return true;
+          if (year === activatedYear && monthIndex >= activatedMonth) return true;
+
+          return false;
+        })
+        .map((s) => s.id);
+
+      if (missingStaffIds.length > 0) {
         const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
         const newRecordsData = [];
 

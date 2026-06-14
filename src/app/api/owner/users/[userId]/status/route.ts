@@ -62,7 +62,10 @@ export async function PATCH(request: Request, { params }: RouteContext) {
 
   await prisma.user.update({
     where: { id: params.userId },
-    data: { status: body.status },
+    data: {
+      status: body.status,
+      activatedAt: body.status === "ACTIVE" ? new Date() : null,
+    },
   });
 
   const statusMessages = {

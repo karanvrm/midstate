@@ -29,6 +29,8 @@ model User {
   role   Role   @default(STAFF)
   status Status @default(PENDING)
 
+  activatedAt DateTime?
+
   taskAssignments   TaskAssignment[]
   attendanceRecords AttendanceRecord[]
 
