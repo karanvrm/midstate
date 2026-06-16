@@ -1,12 +1,16 @@
 import { authOptions } from "@/auth";
+import {
+  createEmptyJobDescriptionTable,
+  normalizeJobDescriptionTable,
+} from "@/lib/job-description-sheet-table";
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
 const createSheetSchema = z.object({
-  name: z.string().trim().min(1, "Sheet name is required."),
-  url: z.string().trim().url("Enter a valid Google Sheet URL."),
+  companyName: z.string().trim().min(1, "Company name is required."),
+  typeOfRoles: z.string().trim().min(1, "Type of roles is required."),
 });
 
 const canViewSheets = (role?: string, status?: string) =>
@@ -14,6 +18,20 @@ const canViewSheets = (role?: string, status?: string) =>
 
 const canManageSheets = (role?: string, status?: string) =>
   status === "ACTIVE" && (role === "OWNER" || role === "ADMIN");
+
+const serializeSheetSummary = (sheet: {
+  id: string;
+  companyName: string;
+  typeOfRoles: string;
+  createdAt: Date;
+  updatedAt: Date;
+}) => ({
+  id: sheet.id,
+  companyName: sheet.companyName,
+  typeOfRoles: sheet.typeOfRoles,
+  createdAt: sheet.createdAt.toISOString(),
+  updatedAt: sheet.updatedAt.toISOString(),
+});
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -25,14 +43,17 @@ export async function GET() {
   try {
     const sheets = await prisma.jobDescriptionSheet.findMany({
       orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        companyName: true,
+        typeOfRoles: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     return NextResponse.json({
-      sheets: sheets.map((sheet) => ({
-        ...sheet,
-        createdAt: sheet.createdAt.toISOString(),
-        updatedAt: sheet.updatedAt.toISOString(),
-      })),
+      sheets: sheets.map(serializeSheetSummary),
     });
   } catch (error) {
     console.error("Unable to load job description sheets.", error);
@@ -62,21 +83,40 @@ export async function POST(request: Request) {
 
   try {
     const sheet = await prisma.jobDescriptionSheet.create({
-      data: parsed.data,
+      data: {
+        companyName: parsed.data.companyName,
+        typeOfRoles: parsed.data.typeOfRoles,
+        tableData: createEmptyJobDescriptionTable(),
+        rowColors: null,
+        columnWidths: null,
+      } as any,
     });
 
     return NextResponse.json(
       {
         sheet: {
-          ...sheet,
-          createdAt: sheet.createdAt.toISOString(),
-          updatedAt: sheet.updatedAt.toISOString(),
+          ...serializeSheetSummary(sheet),
+          tableData: normalizeJobDescriptionTable(sheet.tableData),
+          rowColors: (sheet as any).rowColors,
+          columnWidths: (sheet as any).columnWidths,
         },
-        message: "Sheet saved successfully.",
+        message: "Sheet created successfully.",
       },
       { status: 201 },
     );
   } catch (error) {
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      error.code === "P2002"
+    ) {
+      return NextResponse.json(
+        { error: "A sheet with this company name already exists." },
+        { status: 409 },
+      );
+    }
+
     console.error("Unable to create job description sheet.", error);
     return NextResponse.json(
       { error: "Unable to connect to the database. Please try again shortly." },

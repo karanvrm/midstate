@@ -53,7 +53,7 @@ const HOW_WE_WORK = [
         phase: "Phase 1",
         title: "Application Review",
         description:
-            "We review your application and understand your requirements, experience, and career goals. A dedicated coordinator then contacts you to discuss opportunities and guide you through the next steps.",
+            "We review your application and understand your requirements, experience, and career goals. A dedicated HR Recruiter then contacts you to discuss opportunities and guide you through the next steps.",
         accent: "from-violet-500/20 via-violet-500/10 to-transparent",
         dot: "bg-violet-500",
         glow: "shadow-violet-500/20",
@@ -71,7 +71,7 @@ const HOW_WE_WORK = [
         phase: "Phase 3",
         title: "Opportunity Matching",
         description:
-            "We match candidates with suitable opportunities and coordinate interviews with hiring teams.Our team coordinates interviews, provides scheduling assistance, and keeps candidates informed throughout every stage of the selection process.",
+            "We match candidates with suitable opportunities and coordinate interviews with our clients. Our team coordinates interviews, provides scheduling assistance, and keeps candidates informed throughout every stage of the selection process.",
         accent: "from-sky-500/20 via-sky-500/10 to-transparent",
         dot: "bg-sky-500",
         glow: "shadow-sky-500/20",

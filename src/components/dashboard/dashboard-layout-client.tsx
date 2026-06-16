@@ -38,7 +38,8 @@ import {
   XIcon,
   BellIcon,
   BookOpenTextIcon,
-  HomeIcon
+  HomeIcon,
+  BriefcaseIcon
 } from "lucide-react";
 
 interface UserSession {
@@ -81,29 +82,25 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
 
   // Define sidebar navigation items based on user role
   const isManager = user.role === "OWNER" || user.role === "ADMIN";
-  
+
   const ownerNavItems: NavItem[] = [
-    ...(user.role === "OWNER"
-      ? [
-          {
-            label: "Manage Staffs",
-            href: "/dashboard/owner",
-            icon: Users2Icon,
-            active: pathname === "/dashboard/owner",
-          },
-        ]
-      : []),
     {
-      label: "Task Management",
-      href: "/dashboard/owner/tasks",
-      icon: CheckSquareIcon,
-      active: pathname.startsWith("/dashboard/owner/tasks"),
+      label: "Overview",
+      href: "/dashboard/owner",
+      icon: LayoutDashboardIcon,
+      active: pathname === "/dashboard/owner",
     },
     {
-      label: "Job Descriptions",
-      href: "/dashboard/owner/job-descriptions",
-      icon: FileTextIcon,
-      active: pathname.startsWith("/dashboard/owner/job-descriptions"),
+      label: "Applications",
+      href: "/dashboard/owner/applications",
+      icon: BriefcaseIcon,
+      active: pathname.startsWith("/dashboard/owner/applications"),
+    },
+    {
+      label: "Attendance",
+      href: "/dashboard/owner/attendance",
+      icon: CalendarIcon,
+      active: pathname.startsWith("/dashboard/owner/attendance"),
     },
     {
       label: "Briefing",
@@ -112,21 +109,27 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
       active: pathname.startsWith("/dashboard/owner/briefings"),
     },
     {
-      label: "Attendance",
-      href: "/dashboard/owner/attendance",
-      icon: CalendarIcon,
-      active: pathname.startsWith("/dashboard/owner/attendance"),
+      label: "Job Descriptions",
+      href: "/dashboard/owner/job-descriptions",
+      icon: FileTextIcon,
+      active: pathname.startsWith("/dashboard/owner/job-descriptions"),
     },
     ...(user.role === "OWNER"
       ? [
-          {
-            label: "Staff Panel View",
-            href: "/dashboard/staff?allowOwner=true",
-            icon: ShieldCheckIcon,
-            active: pathname.startsWith("/dashboard/staff"),
-          },
-        ]
+        {
+          label: "Manage Staffs",
+          href: "/dashboard/owner/manage-staffs",
+          icon: Users2Icon,
+          active: pathname.startsWith("/dashboard/owner/manage-staffs"),
+        },
+      ]
       : []),
+    {
+      label: "Task Management",
+      href: "/dashboard/owner/tasks",
+      icon: CheckSquareIcon,
+      active: pathname.startsWith("/dashboard/owner/tasks"),
+    },
   ];
 
   const staffNavItems: NavItem[] = [
@@ -137,10 +140,16 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
       active: pathname === "/dashboard/staff" && !pathname.includes("allowOwner=true"),
     },
     {
-      label: "Tasks",
-      href: "/dashboard/staff/tasks",
-      icon: CheckSquareIcon,
-      active: pathname.startsWith("/dashboard/staff/tasks"),
+      label: "Applications",
+      href: "/dashboard/staff/applications",
+      icon: BriefcaseIcon,
+      active: pathname.startsWith("/dashboard/staff/applications"),
+    },
+    {
+      label: "Briefing",
+      href: "/dashboard/staff/briefings",
+      icon: BookOpenTextIcon,
+      active: pathname.startsWith("/dashboard/staff/briefings"),
     },
     {
       label: "Job Descriptions",
@@ -149,10 +158,10 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
       active: pathname.startsWith("/dashboard/staff/job-descriptions"),
     },
     {
-      label: "Briefing",
-      href: "/dashboard/staff/briefings",
-      icon: BookOpenTextIcon,
-      active: pathname.startsWith("/dashboard/staff/briefings"),
+      label: "Tasks",
+      href: "/dashboard/staff/tasks",
+      icon: CheckSquareIcon,
+      active: pathname.startsWith("/dashboard/staff/tasks"),
     },
   ];
 
@@ -182,7 +191,7 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
             <Logo variant="full" className="h-7 w-auto" />
           </Link>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto px-4 py-6">
           <div className="mb-6 rounded-2xl border border-white/10 bg-white/[0.02] p-4">
             <div className="flex items-center gap-3">
@@ -270,7 +279,7 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
             <Button variant="ghost" size="icon" className="rounded-full border border-white/5 bg-white/[0.02] text-muted-foreground hover:text-foreground">
               <BellIcon className="h-4.5 w-4.5" />
             </Button>
-            
+
             <Button asChild variant="outline" size="sm" className="hidden sm:inline-flex border-white/10 bg-white/[0.02]">
               <Link href="/" className="flex items-center gap-1.5">
                 <HomeIcon className="h-3.5 w-3.5" />
@@ -415,12 +424,12 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Sign Out</AlertDialogTitle>
             <AlertDialogDescription>
-             Are you sure you want to sign out? You&apos;ll need to sign in again to access your dashboard.
+              Are you sure you want to sign out? You&apos;ll need to sign in again to access your dashboard.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <div className="flex justify-end gap-3">
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction 
+            <AlertDialogAction
               onClick={handleConfirmLogout}
               className="bg-red-600 hover:bg-red-700"
             >

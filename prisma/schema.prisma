@@ -31,19 +31,23 @@ model User {
 
   activatedAt DateTime?
 
-  taskAssignments   TaskAssignment[]
-  attendanceRecords AttendanceRecord[]
+  taskAssignments      TaskAssignment[]
+  attendanceRecords    AttendanceRecord[]
+  assignedApplications Application[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model JobDescriptionSheet {
-  id        String   @id @default(cuid())
-  name      String
-  url       String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  companyName  String   @unique
+  typeOfRoles  String
+  tableData    Json
+  rowColors    Json?
+  columnWidths Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model AttendanceSheet {
@@ -122,3 +126,21 @@ model TaskAssignment {
 
   @@unique([taskId, userId])
 }
+
+model Application {
+  id                String   @id @default(cuid())
+  fullName          String
+  phoneNumber       String
+  email             String
+  preferredLocation String
+  jobTitle          String
+  resumeName        String
+  resumeType        String
+  resumeData        Bytes
+  status            String   @default("Active")
+  assignedToId      String?
+  assignedTo        User?    @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+

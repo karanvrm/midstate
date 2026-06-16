@@ -27,7 +27,7 @@ const Statistic = ({ value, label, id }: StatisticProps) => {
 
 export const StatsBar = () => {
   const stats: StatisticProps[] = [
-    { value: 500, label: "Placements", id: "placements" },
+    { value: 2000, label: "Placements", id: "placements" },
     { value: 10, label: "Clients", id: "clients" },
     { value: 8, label: "Cities", id: "cities" },
     { value: 20, label: "Designations", id: "roles" },

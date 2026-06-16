@@ -443,15 +443,15 @@ const AboutVisualStack = () => (
                     <span className="text-[10px] text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">Active</span>
                 </div>
                 <div className="space-y-1.5">
-                    {["Sourcing", "Screening", "Placement"].map((step, i) => (
+                    {["Screening", "Sourcing", "Placement"].map((step, i) => (
                         <div key={step} className="flex items-center gap-2">
                             <div className={cn("h-1.5 rounded-full flex-1 bg-white/10 overflow-hidden")}>
                                 <motion.div
                                     className={cn("h-full rounded-full", i === 0 ? "bg-violet-400" : i === 1 ? "bg-sky-400" : "bg-emerald-400")}
                                     initial={{ width: "0%" }}
-                                    whileInView={{ width: i === 0 ? "85%" : i === 1 ? "60%" : "40%" }}
+                                    whileInView={{ width: i === 0 ? "90%" : i === 1 ? "70%" : "50%" }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 1.5, delay: 0.5 + i * 0.2, ease: "easeOut" }}
+                                    transition={{ duration: 1.5, delay: 0.5 + i * 0.05, ease: "easeOut" }}
                                 />
                             </div>
                             <span className="text-[10px] text-muted-foreground w-14 shrink-0">{step}</span>

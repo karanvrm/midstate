@@ -1,6 +1,6 @@
 "use client";
 
-import type { JobDescriptionSheet } from "@/types/job-description-sheet";
+import type { JobDescriptionSheetSummary } from "@/types/job-description-sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,16 +25,18 @@ import {
   ArrowUpRightIcon,
   FileTextIcon,
   Loader2Icon,
-  PencilIcon,
   PlusIcon,
+  Trash2Icon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 
 interface JobDescriptionsClientProps {
-  sheets: JobDescriptionSheet[];
+  sheets: JobDescriptionSheetSummary[];
   canManage: boolean;
+  sheetBasePath: string;
+  sheetOpenQuery?: string;
   loadError?: string;
 }
 
@@ -45,30 +47,25 @@ const formatDate = (value: string) =>
     year: "numeric",
   }).format(new Date(value));
 
-const isValidUrl = (value: string) => {
-  try {
-    new URL(value);
-    return true;
-  } catch {
-    return false;
-  }
-};
-
-const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptionsClientProps) => {
+const JobDescriptionsClient = ({
+  sheets,
+  canManage,
+  sheetBasePath,
+  sheetOpenQuery = "",
+  loadError,
+}: JobDescriptionsClientProps) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [name, setName] = useState("");
-  const [url, setUrl] = useState("");
-  const [editingSheet, setEditingSheet] = useState<JobDescriptionSheet | null>(null);
-  const [editUrl, setEditUrl] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [editError, setEditError] = useState<string | null>(null);
+  const [companyName, setCompanyName] = useState("");
+  const [typeOfRoles, setTypeOfRoles] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [deletingSheet, setDeletingSheet] = useState<JobDescriptionSheetSummary | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const resetForm = () => {
-    setName("");
-    setUrl("");
+    setCompanyName("");
+    setTypeOfRoles("");
     setError(null);
   };
 
@@ -80,25 +77,20 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
     }
   };
 
-  const handleSave = async (event: FormEvent<HTMLFormElement>) => {
+  const handleCreate = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
 
-    const trimmedName = name.trim();
-    const trimmedUrl = url.trim();
+    const trimmedCompanyName = companyName.trim();
+    const trimmedTypeOfRoles = typeOfRoles.trim();
 
-    if (!trimmedName) {
-      setError("Sheet name is required.");
+    if (!trimmedCompanyName) {
+      setError("Company name is required.");
       return;
     }
 
-    if (!trimmedUrl) {
-      setError("Google Sheet URL is required.");
-      return;
-    }
-
-    if (!isValidUrl(trimmedUrl)) {
-      setError("Enter a valid URL.");
+    if (!trimmedTypeOfRoles) {
+      setError("Type of roles is required.");
       return;
     }
 
@@ -114,8 +106,8 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: trimmedName,
-          url: trimmedUrl,
+          companyName: trimmedCompanyName,
+          typeOfRoles: trimmedTypeOfRoles,
         }),
       });
 
@@ -129,80 +121,49 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
     setIsSaving(false);
 
     if (!response.ok) {
-      setError(data.error ?? "Unable to save this sheet.");
+      setError(data.error ?? "Unable to create this sheet.");
       return;
     }
 
-    toast.success(data.message ?? "Sheet saved successfully.");
+    toast.success(data.message ?? "Sheet created successfully.");
     handleOpenChange(false);
     router.refresh();
   };
 
-  const handleEditOpenChange = (open: boolean) => {
-    if (!open) {
-      setEditingSheet(null);
-      setEditUrl("");
-      setEditError(null);
-    }
-  };
+  const handleDeleteConfirm = async () => {
+    if (!deletingSheet) return;
 
-  const openEditDialog = (sheet: JobDescriptionSheet) => {
-    setEditingSheet(sheet);
-    setEditUrl(sheet.url);
-    setEditError(null);
-  };
-
-  const handleUpdate = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!editingSheet) {
-      return;
-    }
-
-    const trimmedUrl = editUrl.trim();
-    setEditError(null);
-
-    if (!trimmedUrl) {
-      setEditError("Google Sheet URL is required.");
-      return;
-    }
-
-    if (!isValidUrl(trimmedUrl)) {
-      setEditError("Enter a valid URL.");
-      return;
-    }
-
-    setIsUpdating(true);
+    setIsDeleting(true);
 
     let response: Response;
     let data: { error?: string; message?: string } = {};
 
     try {
-      response = await fetch(`/api/job-description-sheets/${editingSheet.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url: trimmedUrl }),
+      response = await fetch(`/api/job-description-sheets/${deletingSheet.id}`, {
+        method: "DELETE",
       });
 
       data = await response.json().catch(() => ({}));
     } catch {
-      setIsUpdating(false);
-      setEditError("Unable to reach the server. Please try again.");
+      setIsDeleting(false);
+      toast.error("Unable to reach the server. Please try again.");
       return;
     }
 
-    setIsUpdating(false);
+    setIsDeleting(false);
 
     if (!response.ok) {
-      setEditError(data.error ?? "Unable to update this sheet link.");
+      toast.error(data.error ?? "Unable to delete this sheet.");
       return;
     }
 
-    toast.success(data.message ?? "Sheet link updated successfully.");
-    handleEditOpenChange(false);
+    toast.success(data.message ?? "Sheet deleted successfully.");
+    setDeletingSheet(null);
     router.refresh();
+  };
+
+  const openSheet = (sheetId: string) => {
+    router.push(`${sheetBasePath}/${sheetId}${sheetOpenQuery}`);
   };
 
   return (
@@ -219,7 +180,7 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
                 Job Descriptions
               </h1>
               <p className="max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">
-                Manage Google Sheets used for recruiter job descriptions.
+                Create and manage job description sheets for each company and role type.
               </p>
             </div>
           </div>
@@ -265,38 +226,34 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
                   ) : null}
                 </div>
                 <CardTitle className="mt-4 line-clamp-2 text-xl font-medium text-foreground">
-                  {sheet.name}
+                  {sheet.companyName}
                 </CardTitle>
+                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                  {sheet.typeOfRoles}
+                </p>
               </CardHeader>
-              <CardContent className="relative flex items-center justify-between gap-4 pt-5">
-                {canManage ? (
-                  <div className="text-xs text-muted-foreground">
-                    
-                  </div>
-                ) : (
-                  <div className="text-xs text-muted-foreground">
-                    Google Sheet
-                  </div>
-                )}
-                <div className="flex shrink-0 items-center gap-2">
+              <CardContent className="relative pt-5">
+                <div className="flex items-center justify-between gap-4">
                   {canManage ? (
                     <Button
                       type="button"
-                      size="sm"
-                      variant="outline"
-                      className="gap-2 border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground"
-                      onClick={() => openEditDialog(sheet)}
+                      size="icon"
+                      variant="ghost"
+                      className="size-8 shrink-0 text-red-400/70 hover:bg-red-500/15 hover:text-red-400"
+                      onClick={() => setDeletingSheet(sheet)}
+                      aria-label="Delete job description sheet"
                     >
-                      <PencilIcon className="size-3.5" />
-                      Edit Link
+                      <Trash2Icon className="size-4" />
                     </Button>
-                  ) : null}
+                  ) : (
+                    <div className="text-xs text-muted-foreground">Job description sheet</div>
+                  )}
                   <Button
                     type="button"
                     size="sm"
                     variant="outline"
                     className="gap-2 border-violet-400/30 bg-violet-400/10 text-violet-100 hover:bg-violet-400/20 hover:text-white"
-                    onClick={() => window.open(sheet.url, "_blank")}
+                    onClick={() => openSheet(sheet.id)}
                   >
                     Open Sheet
                     <ArrowUpRightIcon className="size-3.5" />
@@ -313,7 +270,7 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
             <h2 className="text-lg font-medium text-foreground">No sheets yet</h2>
             <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
               {canManage
-                ? "Add the first Google Sheet link so recruiters can open job descriptions quickly."
+                ? "Create the first job description sheet to get started."
                 : "Available job description sheets will appear here when an admin adds them."}
             </p>
           </div>
@@ -322,33 +279,33 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
 
       <Dialog open={isOpen} onOpenChange={handleOpenChange}>
         <DialogContent className="border-border/80 bg-neutral-950 sm:rounded-2xl">
-          <form onSubmit={handleSave}>
+          <form onSubmit={handleCreate}>
             <DialogHeader>
               <DialogTitle>Add Sheet</DialogTitle>
               <DialogDescription>
-                Store a Google Sheet link for recruiter job descriptions.
+                Create a new job description sheet with an empty spreadsheet table.
               </DialogDescription>
             </DialogHeader>
 
             <div className="mt-6 space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="sheet-name">Sheet Name</Label>
+                <Label htmlFor="company-name">Company Name</Label>
                 <Input
-                  id="sheet-name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
+                  id="company-name"
+                  value={companyName}
+                  onChange={(event) => setCompanyName(event.target.value)}
                   placeholder="TELUS"
                   className="border-white/10 bg-white/[0.03]"
                   disabled={isSaving}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="sheet-url">Google Sheet URL</Label>
+                <Label htmlFor="type-of-roles">Type of Roles</Label>
                 <Input
-                  id="sheet-url"
-                  value={url}
-                  onChange={(event) => setUrl(event.target.value)}
-                  placeholder="https://docs.google.com/spreadsheets/d/..."
+                  id="type-of-roles"
+                  value={typeOfRoles}
+                  onChange={(event) => setTypeOfRoles(event.target.value)}
+                  placeholder="Customer Service, Sales"
                   className="border-white/10 bg-white/[0.03]"
                   disabled={isSaving}
                 />
@@ -371,57 +328,40 @@ const JobDescriptionsClient = ({ sheets, canManage, loadError }: JobDescriptions
               </Button>
               <Button type="submit" disabled={isSaving} className={cn("gap-2")}>
                 {isSaving ? <Loader2Icon className="size-4 animate-spin" /> : null}
-                Save Sheet
+                Create
               </Button>
             </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={Boolean(editingSheet)} onOpenChange={handleEditOpenChange}>
-        <DialogContent className="border-border/80 bg-neutral-950 sm:rounded-2xl">
-          <form onSubmit={handleUpdate}>
-            <DialogHeader>
-              <DialogTitle>Edit Sheet Link</DialogTitle>
-              <DialogDescription>
-                Update the Google Sheet URL for {editingSheet?.name}.
-              </DialogDescription>
-            </DialogHeader>
-
-            <div className="mt-6 space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="edit-sheet-url">Google Sheet URL</Label>
-                <Input
-                  id="edit-sheet-url"
-                  value={editUrl}
-                  onChange={(event) => setEditUrl(event.target.value)}
-                  placeholder="https://docs.google.com/spreadsheets/d/..."
-                  className="border-white/10 bg-white/[0.03]"
-                  disabled={isUpdating}
-                />
-              </div>
-              {editError ? (
-                <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-red-200">
-                  {editError}
-                </div>
-              ) : null}
-            </div>
-
-            <DialogFooter className="mt-6 gap-2 sm:gap-0">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => handleEditOpenChange(false)}
-                disabled={isUpdating}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isUpdating} className="gap-2">
-                {isUpdating ? <Loader2Icon className="size-4 animate-spin" /> : null}
-                Save Sheet
-              </Button>
-            </DialogFooter>
-          </form>
+      <Dialog open={Boolean(deletingSheet)} onOpenChange={(open) => { if (!open && !isDeleting) setDeletingSheet(null); }}>
+        <DialogContent className="border-border/80 bg-neutral-950 sm:max-w-md sm:rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>Delete Job Description</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete &quot;{deletingSheet?.companyName || "this sheet"}&quot;?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-6 gap-2 sm:gap-0">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setDeletingSheet(null)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              disabled={isDeleting}
+              className="gap-2 bg-red-600 text-white hover:bg-red-700"
+              onClick={handleDeleteConfirm}
+            >
+              {isDeleting ? <Loader2Icon className="size-4 animate-spin" /> : <Trash2Icon className="size-4" />}
+              Delete
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

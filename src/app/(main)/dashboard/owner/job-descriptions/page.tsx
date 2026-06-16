@@ -1,7 +1,7 @@
 import { authOptions } from "@/auth";
 import JobDescriptionsClient from "@/components/dashboard/job-descriptions-client";
 import { prisma } from "@/lib/prisma";
-import type { JobDescriptionSheet } from "@/types/job-description-sheet";
+import type { JobDescriptionSheetSummary } from "@/types/job-description-sheet";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -20,12 +20,19 @@ const OwnerJobDescriptionsPage = async () => {
     redirect("/dashboard");
   }
 
-  let sheets: JobDescriptionSheet[] = [];
+  let sheets: JobDescriptionSheetSummary[] = [];
   let loadError: string | undefined;
 
   try {
     const dbSheets = await prisma.jobDescriptionSheet.findMany({
       orderBy: { createdAt: "desc" },
+      select: {
+        id: true,
+        companyName: true,
+        typeOfRoles: true,
+        createdAt: true,
+        updatedAt: true,
+      },
     });
 
     sheets = dbSheets.map((sheet) => ({
@@ -43,6 +50,7 @@ const OwnerJobDescriptionsPage = async () => {
     <JobDescriptionsClient
       canManage
       loadError={loadError}
+      sheetBasePath="/dashboard/owner/job-descriptions"
       sheets={sheets}
     />
   );
