@@ -25,6 +25,7 @@ export default function RootLayout({
                     <Toaster richColors theme="dark" position="top-right" />
                     {children}
                     <WhatsAppWidget />
+                    <Analytics />
                 </Providers>
             </body>
         </html>
