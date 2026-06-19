@@ -1,4 +1,5 @@
 import { Providers, WhatsAppWidget } from "@/components";
+import { Analytics } from "@vercel/analytics/next"
 import { Toaster } from "@/components/ui/sonner";
 // @ts-ignore: side-effect import for global styles
 import "@/styles/globals.css";
