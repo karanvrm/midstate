@@ -18,9 +18,23 @@ import { LucideIcon, Menu, X } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from 'react';
 
-const MobileNavbar = () => {
+interface MobileNavbarProps {
+    isOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+}
 
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+const MobileNavbar = ({ isOpen: controlledIsOpen, onOpenChange }: MobileNavbarProps) => {
+
+    const [localIsOpen, setLocalIsOpen] = useState<boolean>(false);
+
+    const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : localIsOpen;
+    const setIsOpen = (open: boolean) => {
+        if (onOpenChange) {
+            onOpenChange(open);
+        } else {
+            setLocalIsOpen(open);
+        }
+    };
 
     const handleClose = () => {
         setIsOpen(false);
@@ -127,4 +141,4 @@ const ListItem = React.forwardRef<
 })
 ListItem.displayName = "ListItem"
 
-export default MobileNavbar
+export default MobileNavbar;

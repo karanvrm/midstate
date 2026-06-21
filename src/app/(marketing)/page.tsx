@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LampContainer } from "@/components/ui/lamp";
 import MagicBadge from "@/components/ui/magic-badge";
 import MagicCard from "@/components/ui/magic-card";
+import CTASectionWithGallery from "@/components/ui/cta-section-with-gallery";
 import { PROCESS } from "@/utils";
 import {
     ArrowRightIcon,
@@ -109,7 +110,7 @@ const HomePage = async () => {
                             Midstate Global <span className="text-transparent bg-gradient-to-r from-violet-500 to-fuchsia-500 bg-clip-text inline-bloc">Services</span>
                         </h1>
                         <p className="mb-12 text-lg tracking-tight text-muted-foreground md:text-xl text-balance">
-                            Discover better career opportunities with ease. Connect with companies actively hiring and take the next step toward the job you deserve.
+                            Trusted by businesses for efficient hiring solutions and valued by professionals for meaningful opportunities, we create connections that drive growth, success, and long-term impact.
                         </p>
                     </AnimationContainer>
 
@@ -121,20 +122,9 @@ const HomePage = async () => {
             {/* Statistics Section */}
             <StatsBar />
 
-            {/* Features Section */}
-            <MaxWidthWrapper className="pt-10">
-                <AnimationContainer delay={0.1}>
-                    <div className="flex flex-col w-full items-center lg:items-center justify-center py-8">
-                        <MagicBadge title="Features" />
-                        <h2 className="text-center lg:text-center text-3xl md:text-5xl !leading-[1.1] font-medium font-heading text-foreground mt-6">
-                            Connecting Talent with Opportunity
-                        </h2>
-                        <p className="mt-4 text-center lg:text-center text-lg text-muted-foreground max-w-lg">
-                            Midstate Global Services partners with leading companies to recruit talented professionals. We help candidates discover new opportunities and apply to top employers through a simple platform.
-                        </p>
-                    </div>
-                </AnimationContainer>
-                {/* Feature images removed per request */}
+            {/* Journey Section */}
+            <MaxWidthWrapper className="py-20 md:py-28">
+                <CTASectionWithGallery />
             </MaxWidthWrapper>
 
             {/* Process Section */}

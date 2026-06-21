@@ -19,31 +19,65 @@ import MaxWidthWrapper from "../global/max-width-wrapper";
 import MobileNavbar from "./mobile-navbar";
 import AnimationContainer from "../global/animation-container";
 import logo from "../../../Logo.webp";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
-
     const [scroll, setScroll] = useState(false);
-
-    const handleScroll = () => {
-        if (window.scrollY > 8) {
-            setScroll(true);
-        } else {
-            setScroll(false);
-        }
-    };
+    const [visible, setVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+
+            // Handle background blur trigger (> 8px)
+            if (currentScrollY > 8) {
+                setScroll(true);
+            } else {
+                setScroll(false);
+            }
+
+            // Keep navbar visible if mobile menu is open
+            if (isMobileMenuOpen) {
+                setVisible(true);
+                return;
+            }
+
+            if (currentScrollY < 50) {
+                setVisible(true);
+            } else {
+                const diff = currentScrollY - lastScrollY;
+                if (diff > 15) {
+                    // Scrolling down significantly -> hide
+                    setVisible(false);
+                } else if (diff < -15) {
+                    // Scrolling up significantly -> show
+                    setVisible(true);
+                }
+            }
+
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => {
             window.removeEventListener("scroll", handleScroll);
         };
-    }, []);
+    }, [lastScrollY, isMobileMenuOpen]);
 
     return (
-        <header className={cn(
-            "sticky top-0 inset-x-0 h-20 w-full border-b border-transparent z-[99999] select-none",
-            scroll && "border-background/80 bg-background/40 backdrop-blur-md"
-        )}>
+        <motion.header
+            initial={{ y: 0 }}
+            animate={{
+                y: visible ? 0 : -80,
+            }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className={cn(
+                "fixed top-0 inset-x-0 h-20 w-full border-b border-transparent z-[99999] select-none transition-colors duration-200",
+                scroll && "border-background/80 bg-background/40 backdrop-blur-md"
+            )}
+        >
             <AnimationContainer reverse delay={0.1} className="size-full">
                 <MaxWidthWrapper className="flex items-center justify-between">
                     <div className="flex items-center space-x-12">
@@ -70,7 +104,7 @@ const Navbar = () => {
                                                 <NavigationMenuTrigger>{link.title}</NavigationMenuTrigger>
                                                 <NavigationMenuContent>
                                                     <ul className={cn(
-                                                        "grid gap-1 p-4 md:w-[400px] lg:w-[500px] rounded-xl",
+                                                        "grid gap-1 p-4 md:w-[400px] lg:w-[500px] rounded-xl bg-neutral-950 border border-white/10",
                                                         link.title === "About Us" ? "lg:grid-cols-[.75fr_1fr]" : "lg:grid-cols-2"
                                                     )}>
                                                         {link.menu.map((menuItem) => (
@@ -97,7 +131,6 @@ const Navbar = () => {
                                 ))}
                             </NavigationMenuList>
                         </NavigationMenu>
-
                     </div>
 
                     <div className="hidden lg:flex items-center gap-2">
@@ -109,12 +142,11 @@ const Navbar = () => {
                         </Button>
                     </div>
 
-                    <MobileNavbar />
-
+                    <MobileNavbar isOpen={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen} />
                 </MaxWidthWrapper>
             </AnimationContainer>
-        </header>
-    )
+        </motion.header>
+    );
 };
 
 const ListItem = React.forwardRef<
@@ -149,4 +181,4 @@ const ListItem = React.forwardRef<
 })
 ListItem.displayName = "ListItem"
 
-export default Navbar
+export default Navbar;
