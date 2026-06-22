@@ -1,10 +1,12 @@
-import { AnimationContainer, MaxWidthWrapper, StatsBar } from "@/components";
+import { AnimationContainer, Icons, MaxWidthWrapper, StatsBar } from "@/components";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button } from "@/components/ui/button";
 import { LampContainer } from "@/components/ui/lamp";
 import MagicBadge from "@/components/ui/magic-badge";
 import MagicCard from "@/components/ui/magic-card";
 import CTASectionWithGallery from "@/components/ui/cta-section-with-gallery";
+import { Badge } from "@/components/ui/badge";
+import Marquee from "@/components/ui/marquee";
 import { PROCESS } from "@/utils";
 import {
     ArrowRightIcon,
@@ -13,6 +15,10 @@ import {
     LandmarkIcon,
     MonitorIcon,
     ShoppingBagIcon,
+    ClipboardList,
+    ScanSearch,
+    Shuffle,
+    BadgeCheck,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -88,10 +94,60 @@ const HOW_WE_WORK = [
     },
 ];
 
+const marqueeData = [
+    "Is this role the right fit for my experience?",
+    "What happens after submitting my application?",
+    "How long does the screening process take?",
+    "Will a recruiter contact me directly?",
+    "How do I prepare for the interview?",
+    "What skills do recruiters prefer?",
+    "Which opportunities match my profile best?",
+    "How can I stand out from other candidates?",
+    "What should I expect during the evaluation?",
+    "How will I know if shortlisted?",
+    "What happens after receiving an offer?",
+    "Will I get support during onboarding?",
+];
+
+const features = [
+    {
+        description:
+            "We review your application to understand your experience, qualifications, and career goals. A dedicated recruiter then reaches out to discuss suitable opportunities and guide you through the next steps.",
+        icon: ClipboardList,
+        title: "Application Review",
+    },
+    {
+        description:
+            "Our team conducts an initial screening and gathers key details such as experience, skills, and previous compensation. Based on this, we connect you with the most suitable job opportunities.",
+        icon: ScanSearch,
+        title: "Screening & Evaluation",
+    },
+    {
+        description:
+            "We match candidates with suitable opportunities and coordinate interviews with our clients. Our team coordinates interviews, provides scheduling assistance, and keeps candidates informed throughout every stage of the selection process.",
+        icon: Shuffle,
+        title: "Opportunity Matching",
+    },
+    {
+        description:
+            "Selected candidates receive dedicated support through the final stages of recruitment, including offer discussions, documentation, and joining formalities. We work closely with both the candidate and employer to ensure a smooth transition.",
+        icon: BadgeCheck,
+        title: "Offer & Onboarding",
+    },
+];
+
+const m1 = marqueeData.slice(0, marqueeData.length / 3);
+const m2 = marqueeData.slice(
+    marqueeData.length / 3,
+    (marqueeData.length / 3) * 2,
+);
+const m3 = marqueeData.slice((marqueeData.length / 3) * 2);
+
 const HomePage = async () => {
 
     return (
         <div className="overflow-x-hidden scrollbar-hide size-full">
+            <div className="mt-24"> </div>
             {/* Hero Section */}
             <MaxWidthWrapper>
                 <div className="flex flex-col items-center justify-center w-full text-center bg-gradient-to-t from-background">
@@ -133,10 +189,10 @@ const HomePage = async () => {
                     <div className="flex flex-col items-center lg:items-center justify-center w-full py-8 max-w-xl mx-auto">
                         <MagicBadge title="Application Process" />
                         <h2 className="text-center lg:text-center text-3xl md:text-5xl !leading-[1.1] font-medium font-heading text-foreground mt-6">
-                            Start Your Journey in 3 Steps
+                            Start Your Career Journey
                         </h2>
                         <p className="mt-4 text-center lg:text-center text-lg text-muted-foreground max-w-lg">
-                            Follow these simple steps to upload your resume, explore opportunities, and apply to top companies hiring through Midstate Global Services.
+                            Browse through selected job opportunities, find positions that align with your experience and career goals, and complete your application in a few steps. We&apos;re here to help bridge the gap between talented professionals and organizations looking for candidates.
                         </p>
                     </div>
                 </AnimationContainer>
@@ -164,7 +220,6 @@ const HomePage = async () => {
                 </div>
             </MaxWidthWrapper>
 
-            {/* Pricing section removed per request */}
 
             {/* Latest Job Opening Section */}
             <MaxWidthWrapper className="py-10">
@@ -221,159 +276,89 @@ const HomePage = async () => {
                 </div>
             </MaxWidthWrapper>
 
-            {/* ── How We Work Section ─────────────────────────────────────────── */}
-            <MaxWidthWrapper className="py-10">
-                <AnimationContainer delay={0.1}>
-                    <div className="flex flex-col items-center justify-center w-full py-8">
-                        <MagicBadge title="How We Work" />
-                        <h2 className="text-center text-3xl md:text-5xl !leading-[1.1] font-medium font-heading text-foreground mt-6">
-                            Your Journey, Step by Step
+
+            {/* Features / Marquee Section */}
+            <section className="relative  pt-20 sm:pt-40 ">
+                <div className="mx-auto max-w-full">
+                    <div className="mx-auto flex max-w-5xl flex-col items-center justify-center space-y-4 px-5 text-center md:px-10">
+                        <MagicBadge title="Our Recruitment Process" />
+
+                        <h2 className="max-w-3xl font-medium text-4xl sm:text-5xl lg:text-6xl">
+                            The Structured Approach to Recruitment
                         </h2>
-                        <p className="mt-4 text-center text-lg text-muted-foreground max-w-lg">
-                            From first contact to final placement, our structured process ensures every candidate gets the attention they deserve.
+                        <p className="max-w-xl text-base md:text-lg">
+                            Finding the right opportunity or the right talent shouldn&apos;t be complicated. Our recruitment process is built to create meaningful connections, streamline hiring, and deliver results for everyone involved.
                         </p>
-                    </div>
-                </AnimationContainer>
+                        <div className="relative mx-auto max-w-3xl overflow-hidden">
+                            <div className="absolute left-0 z-50 h-full w-20 bg-gradient-to-r from-background" />
+                            <div className="absolute right-0 z-50 h-full w-20 bg-gradient-to-l from-background" />
 
-                {/* Desktop / Tablet: staggered zig-zag timeline */}
-                <div className="hidden md:block relative w-full max-w-4xl mx-auto">
-
-                    {/* Vertical center line */}
-                    <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
-
-                    {HOW_WE_WORK.map((step, index) => {
-                        const isLeft = index % 2 === 0;
-                        const topOffset = index * 260 + 16;
-
-                        return (
-                            <div key={step.phase}>
-
-                                {/* Card positioned absolutely for stagger effect */}
-                                <div
-                                    className="absolute w-[46%]"
-                                    style={{
-                                        top: `${topOffset}px`,
-                                        left: isLeft ? "0" : "54%",
-                                    }}
-                                >
-                                    <MagicCard
-                                        className={`
-                                            group relative overflow-hidden border border-border/60
-                                            bg-neutral-950/80 p-0
-                                            shadow-xl ${step.glow}
-                                            hover:shadow-2xl transition-shadow duration-300
-                                        `}
-                                    >
-                                        <div
-                                            className={`
-                                                relative flex flex-col min-h-[200px] rounded-xl
-                                                bg-gradient-to-br ${step.accent}
-                                                p-6
-                                            `}
+                            <div className="-mx-6 flex w-screen flex-col md:-mx-10 lg:-mx-16">
+                                <Marquee className="[--duration:45s] [--gap:0.75rem]" repeat={4}>
+                                    {m1.map((q) => (
+                                        <Badge
+                                            className="rounded-none border-slate-700 bg-slate-900 text-slate-100 px-3 py-1"
+                                            key={q}
+                                            variant="outline"
                                         >
-                                            {/* Subtle radial shine */}
-                                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.06),transparent_60%)] pointer-events-none" />
+                                            {q}
+                                        </Badge>
+                                    ))}
+                                </Marquee>
 
-                                            {/* Phase + Title row */}
-                                            <div className="relative flex items-center justify-between mb-4">
-                                                <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground/70 border border-border/50 rounded-full px-3 py-1">
-                                                    {step.phase}
-                                                </span>
-                                                <h3 className="relative text-lg font-medium text-foreground">
-                                                    {step.title}
-                                                </h3>
-                                            </div>
-
-                                            {/* Description */}
-                                            <p className="relative text-sm text-muted-foreground leading-relaxed">
-                                                {step.description}
-                                            </p>
-                                        </div>
-                                    </MagicCard>
-
-                                    {/* Short horizontal arm to the center line */}
-                                    <div
-                                        className={`
-                                            absolute top-[36px] h-px w-[8.5%] bg-border/40
-                                            ${isLeft
-                                                ? "right-0 translate-x-full"
-                                                : "left-0 -translate-x-full"
-                                            }
-                                        `}
-                                    />
-                                </div>
-
-                                {/* Dot on the center line */}
-                                <div
-                                    className="absolute left-1/2 -translate-x-1/2 z-10"
-                                    style={{ top: `${topOffset + 28}px` }}
+                                <Marquee
+                                    className="[--duration:50s] [--gap:0.75rem]"
+                                    repeat={4}
+                                    reverse
                                 >
-                                    <div
-                                        className={`
-                                            size-4 rounded-full ${step.dot}
-                                            ring-2 ring-background
-                                            shadow-[0_0_10px_3px_rgba(255,255,255,0.07)]
-                                        `}
-                                    />
-                                </div>
+                                    {m2.map((q) => (
+                                        <Badge
+                                            className="rounded-none border-slate-700 bg-slate-900 text-slate-100 px-3 py-1"
+                                            key={q}
+                                            variant="outline"
+                                        >
+                                            {q}
+                                        </Badge>
+                                    ))}
+                                </Marquee>
 
+                                <Marquee className="[--duration:42s] [--gap:0.75rem]" repeat={4}>
+                                    {m3.map((q) => (
+                                        <Badge
+                                            className="rounded-none border-slate-700 bg-slate-900 text-slate-100 px-3 py-1"
+                                            key={q}
+                                            variant="outline"
+                                        >
+                                            {q}
+                                        </Badge>
+                                    ))}
+                                </Marquee>
                             </div>
-                        );
-                    })}
-
-                    {/* Invisible spacer: 3 × stagger (780px) + last card height (220px) + padding (48px) */}
-                    <div style={{ height: `${3 * 260 + 220 + 48}px` }} aria-hidden="true" />
-                </div>
-
-                {/* Mobile: single-column left-edge timeline */}
-                <div className="flex md:hidden flex-col relative pl-6 mt-4">
-                    {/* Left edge line */}
-                    <div className="absolute left-[11px] top-4 bottom-4 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
-
-                    {HOW_WE_WORK.map((step, index) => (
-                        <div key={step.phase} className="relative mb-8">
-                            {/* Dot */}
-                            <div className="absolute -left-[22px] top-[23px] z-10">
-                                <div
-                                    className={`
-                                        size-3.5 rounded-full ${step.dot}
-                                        ring-2 ring-background
-                                    `}
-                                />
-                            </div>
-
-                            {/* Card */}
-                            <MagicCard className="group relative overflow-hidden border border-border/60 bg-neutral-950/80 p-0">
-                                <div
-                                    className={`
-                                        relative flex flex-col rounded-xl
-                                        bg-gradient-to-br ${step.accent}
-                                        p-5
-                                    `}
-                                >
-                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.05),transparent_60%)] pointer-events-none" />
-
-                                    {/* Phase + Title row */}
-                                    <div className="relative flex items-center justify-between mb-3">
-                                        <span className="block text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
-                                            {step.phase}
-                                        </span>
-                                        <h3 className="text-base font-medium text-foreground leading-tight">
-                                            {step.title}
-                                        </h3>
-                                    </div>
-
-                                    <p className="relative text-sm text-muted-foreground leading-relaxed">
-                                        {step.description}
-                                    </p>
-                                </div>
-                            </MagicCard>
                         </div>
-                    ))}
-                </div>
-            </MaxWidthWrapper>
-            {/* ── End How We Work Section ─────────────────────────────────────── */}
+                    </div>
 
+                    <div className="mt-10 grid grid-cols-1 divide-dashed divide-neutral-600 border-neutral-600 border-t border-dashed sm:grid-cols-2 lg:grid-cols-4">
+                        {features.map((feature) => {
+                            const Icon = feature.icon;
+                            return (
+                                <div
+                                    className="flex flex-col gap-5 px-5 py-8 last:border-b-0 lg:border-b-0 lg:px-6 lg:py-10"
+                                    key={feature.title}
+                                >
+                                    <Icon className="size-12 text-neutral-700" />
+
+                                    <div className="flex flex-col gap-2 pt-10 lg:pt-20">
+                                        <h3 className="font-medium text-lg lg:text-2xl">
+                                            {feature.title}
+                                        </h3>
+                                        <p className="text-sm font-light text-neutral-300 max-w-md">{feature.description}</p>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </section>
 
 
             {/* CTA Section */}
@@ -382,11 +367,21 @@ const HomePage = async () => {
                     <LampContainer>
                         <div className="flex flex-col items-center justify-center relative w-full text-center">
                             <h2 className="bg-gradient-to-b from-neutral-200 to-neutral-400 py-4 bg-clip-text text-center text-4xl md:text-7xl !leading-[1.15] font-medium font-heading tracking-tight text-transparent mt-8">
-                                Start Your Career Journey Today
+                                Ready to Advance Your Career?
                             </h2>
                             <p className="text-muted-foreground mt-6 max-w-md mx-auto">
-                                Upload your resume and explore job opportunities from leading companies.
+                                Ready to take the next step? Let&apos;s work together to find the perfect opportunity for your skills and ambitions.
                             </p>
+
+                            {/* CTA Buttons */}
+                            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+                                <Link href="/jobs">
+                                    <Button size="lg" variant="outline" className="px-8 py-6 rounded-full text-base shadow-lg hover:shadow-xl transition-shadow">
+                                        Explore Opportunities
+                                        <ArrowRightIcon className="ml-2 size-5" />
+                                    </Button>
+                                </Link>
+                            </div>
                         </div>
                     </LampContainer>
                 </AnimationContainer>
