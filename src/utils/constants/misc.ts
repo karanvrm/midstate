@@ -88,3 +88,30 @@ export const REVIEWS = [
         rating: 4,
     },
 ] as const;
+
+export const COMPANIES = [
+    {
+        name: "Infosys",
+        logo: "https://logo.clearbit.com/infosys.com",
+    },
+    {
+        name: "Wipro",
+        logo: "https://logo.clearbit.com/wipro.com",
+    },
+    {
+        name: "Tata Consultancy Services",
+        logo: "https://logo.clearbit.com/tcs.com",
+    },
+    {
+        name: "HCL Technologies",
+        logo: "https://logo.clearbit.com/hcltech.com",
+    },
+    {
+        name: "Cognizant",
+        logo: "https://logo.clearbit.com/cognizant.com",
+    },
+    {
+        name: "Accenture",
+        logo: "https://logo.clearbit.com/accenture.com",
+    },
+] as const;

@@ -5,6 +5,7 @@ import { LampContainer } from "@/components/ui/lamp";
 import MagicBadge from "@/components/ui/magic-badge";
 import MagicCard from "@/components/ui/magic-card";
 import { PROCESS } from "@/utils";
+import { REVIEWS } from "@/utils/constants/misc";
 import { ArrowRightIcon, BriefcaseBusinessIcon, HeadsetIcon, LandmarkIcon, MonitorIcon, ShoppingBagIcon, StarIcon } from "lucide-react";
 import Link from "next/link";
 
@@ -170,6 +171,48 @@ const RoleDashboardHome = ({ title }: RoleDashboardHomeProps) => {
                                         </Button>
                                     </div>
                                 </div>
+                            </MagicCard>
+                        </AnimationContainer>
+                    ))}
+                </div>
+            </MaxWidthWrapper>
+
+            <MaxWidthWrapper className="py-10">
+                <AnimationContainer delay={0.1}>
+                    <div className="flex flex-col items-center lg:items-center justify-center w-full py-8 max-w-xl mx-auto">
+                        <MagicBadge title="Our Customers" />
+                        <h2 className="text-center lg:text-center text-3xl md:text-5xl !leading-[1.1] font-medium font-heading text-foreground mt-6">
+                            What our users are saying
+                        </h2>
+                        <p className="mt-4 text-center lg:text-center text-lg text-muted-foreground max-w-lg">
+                            Here&apos;s what some of our users have to say about Midstate Global Services.
+                        </p>
+                    </div>
+                </AnimationContainer>
+                <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-4 py-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+                    {REVIEWS.map((review, index) => (
+                        <AnimationContainer delay={0.15 * index} key={index} className="w-full">
+                            <MagicCard className="h-full max-w-none md:p-0">
+                                <Card className="flex h-full w-full flex-col border-none">
+                                    <CardHeader className="space-y-0">
+                                        <CardTitle className="text-lg font-medium text-muted-foreground">
+                                            {review.name}
+                                        </CardTitle>
+                                        <CardDescription>
+                                            {review.username}
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4 pb-4">
+                                        <p className="text-muted-foreground">
+                                            {review.review}
+                                        </p>
+                                    </CardContent>
+                                    <CardFooter className="mt-auto w-full space-x-1">
+                                        {Array.from({ length: review.rating }, (_, i) => (
+                                            <StarIcon key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
+                                        ))}
+                                    </CardFooter>
+                                </Card>
                             </MagicCard>
                         </AnimationContainer>
                     ))}
