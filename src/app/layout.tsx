@@ -26,6 +26,7 @@ export default function RootLayout({
                     {children}
                     <WhatsAppWidget />
                 </Providers>
+                <Analytics />
             </body>
         </html>
     );
