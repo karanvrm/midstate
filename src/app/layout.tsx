@@ -36,6 +36,7 @@ export default function RootLayout({
 
                     <Analytics />
                 </Providers>
+                <Analytics />
             </body>
         </html>
     );
