@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CreateEditTaskModal } from "./create-edit-task-modal";
 import { TaskCard } from "./task-card";
-import { AlertTriangleIcon, Loader2Icon, PlusIcon } from "lucide-react";
+import { AlertTriangleIcon, Loader2Icon, PlusIcon, UploadIcon } from "lucide-react";
 import { toast } from "sonner";
 
 interface StaffMember {
@@ -79,8 +80,9 @@ export function TasksAdminClient() {
 
   const handleSubmitTask = async (data: {
     name: string;
-    googleSheetUrl: string;
     assignedStaffIds: string[];
+    candidates?: any[];
+    selectedColumns?: string[];
   }) => {
     setIsSubmitting(true);
     try {
@@ -164,10 +166,12 @@ export function TasksAdminClient() {
             </div>
           </div>
 
-          <Button onClick={() => handleOpenModal()} className="w-full gap-2 md:w-auto">
-            <PlusIcon className="size-4" />
-            Add Task
-          </Button>
+          <div className="flex w-full flex-col gap-2 sm:flex-row md:w-auto">
+            <Button onClick={() => handleOpenModal()} className="w-full gap-2 md:w-auto bg-violet-600 hover:bg-violet-500 text-white">
+              <PlusIcon className="size-4" />
+              Assign Task
+            </Button>
+          </div>
         </div>
       </div>
 

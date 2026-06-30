@@ -38,9 +38,9 @@ export default withAuth(
 
     if (pathname.startsWith("/dashboard/staff")) {
       const isOwner = token?.role === "OWNER";
-      const isExplicitlyAllowed = request.nextUrl.searchParams.get("allowOwner") === "true";
+      const isAdmin = token?.role === "ADMIN";
       
-      if (token?.role !== "STAFF" && !(isOwner && isExplicitlyAllowed)) {
+      if (token?.role !== "STAFF" && !isOwner && !isAdmin) {
         return NextResponse.redirect(new URL("/dashboard", request.url));
       }
     }

@@ -7,68 +7,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  OWNER
-  ADMIN
-  STAFF
-}
-
-enum Status {
-  PENDING
-  ACTIVE
-  REJECTED
-}
-
 model User {
-  id           String @id @default(cuid())
-  name         String
-  email        String @unique
-  phoneNumber  String
-  passwordHash String
-
-  role   Role   @default(STAFF)
-  status Status @default(PENDING)
-
-  activatedAt DateTime?
-
-  taskAssignments      TaskAssignment[]
-  attendanceRecords    AttendanceRecord[]
+  id                   String             @id @default(cuid())
+  name                 String
+  email                String             @unique
+  passwordHash         String
+  role                 Role               @default(STAFF)
+  status               Status             @default(PENDING)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  phoneNumber          String
+  activatedAt          DateTime?
   assignedApplications Application[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  attendanceRecords    AttendanceRecord[]
+  Batch                Batch[]
+  Candidate            Candidate[]
+  taskAssignments      TaskAssignment[]
 }
 
 model JobDescriptionSheet {
   id           String   @id @default(cuid())
-  companyName  String   @unique
-  typeOfRoles  String
-  tableData    Json
-  rowColors    Json?
-  columnWidths Json?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  companyName  String   @unique
+  tableData    Json
+  typeOfRoles  String
+  columnWidths Json?
+  rowColors    Json?
 }
 
 model AttendanceSheet {
   id        String             @id @default(cuid())
   name      String             @unique
   url       String?
-  records   AttendanceRecord[]
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
+  records   AttendanceRecord[]
 }
 
 model AttendanceRecord {
   id        String          @id @default(cuid())
   sheetId   String
-  sheet     AttendanceSheet @relation(fields: [sheetId], references: [id], onDelete: Cascade)
   userId    String
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   day       Int
   status    String          @default("-")
   createdAt DateTime        @default(now())
   updatedAt DateTime        @updatedAt
+  sheet     AttendanceSheet @relation(fields: [sheetId], references: [id], onDelete: Cascade)
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([sheetId, userId, day])
 }
@@ -77,10 +63,10 @@ model Briefing {
   id           String         @id @default(cuid())
   companyName  String
   briefingText String
-  links        BriefingLink[]
-  files        BriefingFile[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+  files        BriefingFile[]
+  links        BriefingLink[]
 }
 
 model BriefingLink {
@@ -88,9 +74,9 @@ model BriefingLink {
   briefingId String
   title      String
   url        String
-  briefing   Briefing @relation(fields: [briefingId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  briefing   Briefing @relation(fields: [briefingId], references: [id], onDelete: Cascade)
 
   @@index([briefingId])
 }
@@ -100,9 +86,9 @@ model BriefingFile {
   briefingId String
   fileName   String
   fileUrl    String
-  briefing   Briefing @relation(fields: [briefingId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+  briefing   Briefing @relation(fields: [briefingId], references: [id], onDelete: Cascade)
 
   @@index([briefingId])
 }
@@ -110,19 +96,19 @@ model BriefingFile {
 model Task {
   id                   String           @id @default(cuid())
   name                 String
-  googleSheetUrl       String
-  assignedStaffMembers TaskAssignment[]
   createdAt            DateTime         @default(now())
   updatedAt            DateTime         @updatedAt
+  assignedStaffMembers TaskAssignment[]
+  candidates           Candidate[]
 }
 
 model TaskAssignment {
   id        String   @id @default(cuid())
   taskId    String
   userId    String
+  createdAt DateTime @default(now())
   task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
 
   @@unique([taskId, userId])
 }
@@ -138,9 +124,58 @@ model Application {
   resumeType        String
   resumeData        Bytes
   status            String   @default("Active")
-  assignedToId      String?
-  assignedTo        User?    @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+  assignedToId      String?
+  assignedTo        User?    @relation(fields: [assignedToId], references: [id])
 }
 
+model Batch {
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  job_title   String?
+  uploaded_by String?
+  uploaded_at DateTime    @default(now()) @db.Timestamptz(6)
+  status      String      @default("ACTIVE")
+  User        User?       @relation(fields: [uploaded_by], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Candidate   Candidate[]
+
+  @@index([uploaded_by], map: "idx_batch_uploaded_by")
+}
+
+model Candidate {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  batch_id            String   @db.Uuid
+  assigned_to         String?
+  taskId              String?
+  name                String?
+  email               String?
+  phone               String?
+  current_location    String?
+  preferred_locations String?
+  experience          String?
+  qualification       String?
+  status              String   @default("PENDING")
+  remarks             String?
+  updated_at          DateTime @default(now()) @db.Timestamptz(6)
+  User                User?    @relation(fields: [assigned_to], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  Batch               Batch    @relation(fields: [batch_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  task                Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@index([assigned_to], map: "idx_candidate_assigned")
+  @@index([batch_id], map: "idx_candidate_batch")
+  @@index([status], map: "idx_candidate_status")
+  @@index([taskId])
+}
+
+enum Role {
+  ADMIN
+  STAFF
+  OWNER
+}
+
+enum Status {
+  PENDING
+  ACTIVE
+  REJECTED
+}

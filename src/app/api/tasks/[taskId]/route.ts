@@ -6,12 +6,64 @@ import { z } from "zod";
 
 const updateTaskSchema = z.object({
   name: z.string().trim().min(1, "Task name is required.").optional(),
-  googleSheetUrl: z.string().trim().url("Enter a valid Google Sheet URL.").optional(),
   assignedStaffIds: z.array(z.string()).min(1, "Assign at least one staff member.").optional(),
 });
 
 const canManageTasks = (role?: string, status?: string) =>
   status === "ACTIVE" && (role === "OWNER" || role === "ADMIN");
+
+export async function GET(request: Request, { params }: { params: { taskId: string } }) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user || session.user.status !== "ACTIVE") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const task = await prisma.task.findUnique({
+      where: { id: params.taskId },
+      include: {
+        assignedStaffMembers: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!task) {
+      return NextResponse.json({ error: "Task not found." }, { status: 404 });
+    }
+
+    // For staff member, make sure they are assigned to this task
+    if (session.user.role === "STAFF") {
+      const isAssigned = task.assignedStaffMembers.some(
+        (assignment) => assignment.userId === session.user.id
+      );
+      if (!isAssigned) {
+        return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+      }
+    }
+
+    return NextResponse.json({
+      task: {
+        ...task,
+        assignedStaff: task.assignedStaffMembers.map((assignment) => assignment.user),
+        createdAt: task.createdAt.toISOString(),
+        updatedAt: task.updatedAt.toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("Unable to load task details.", error);
+    return NextResponse.json({ error: "Failed to load task details." }, { status: 503 });
+  }
+}
 
 export async function PUT(request: Request, { params }: { params: { taskId: string } }) {
   const session = await getServerSession(authOptions);
@@ -45,13 +97,21 @@ export async function PUT(request: Request, { params }: { params: { taskId: stri
       await prisma.taskAssignment.deleteMany({
         where: { taskId: params.taskId },
       });
+
+      // Update all candidates for this task to be assigned to the new staff member
+      const newStaffId = parsed.data.assignedStaffIds[0];
+      if (newStaffId) {
+        await prisma.candidate.updateMany({
+          where: { taskId: params.taskId },
+          data: { assigned_to: newStaffId },
+        });
+      }
     }
 
     const task = await prisma.task.update({
       where: { id: params.taskId },
       data: {
         ...(parsed.data.name && { name: parsed.data.name }),
-        ...(parsed.data.googleSheetUrl && { googleSheetUrl: parsed.data.googleSheetUrl }),
         ...(parsed.data.assignedStaffIds && {
           assignedStaffMembers: {
             create: parsed.data.assignedStaffIds.map((userId) => ({

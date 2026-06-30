@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { TaskCard } from "./task-card";
-import { AlertTriangleIcon, Loader2Icon } from "lucide-react";
+import { AlertTriangleIcon, Loader2Icon, UsersIcon } from "lucide-react";
 import { toast } from "sonner";
 
 interface StaffMember {
@@ -65,13 +67,15 @@ export function TasksStaffClient() {
           <Badge variant="outline" className="w-fit border-violet-400/30 bg-violet-400/10 px-2.5 py-0.5 text-[10px] uppercase tracking-widest text-violet-200">
             Your Tasks
           </Badge>
-          <div className="space-y-2">
-            <h1 className="font-heading text-3xl font-medium tracking-tight text-foreground md:text-4xl">
-              My Tasks
-            </h1>
-            <p className="max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">
-              View and access the Google Sheet tasks assigned to you.
-            </p>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div className="space-y-2">
+              <h1 className="font-heading text-3xl font-medium tracking-tight text-foreground md:text-4xl">
+                My Tasks
+              </h1>
+              <p className="max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">
+                View and coordinate the tasks assigned to you.
+              </p>
+            </div>
           </div>
         </div>
       </div>

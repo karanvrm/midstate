@@ -6,14 +6,9 @@ import { z } from "zod";
 
 const createTaskSchema = z.object({
   name: z.string().trim().min(1, "Task name is required."),
-  googleSheetUrl: z.string().trim().url("Enter a valid Google Sheet URL."),
   assignedStaffIds: z.array(z.string()).min(1, "Assign at least one staff member."),
-});
-
-const updateTaskSchema = z.object({
-  name: z.string().trim().min(1, "Task name is required.").optional(),
-  googleSheetUrl: z.string().trim().url("Enter a valid Google Sheet URL.").optional(),
-  assignedStaffIds: z.array(z.string()).min(1, "Assign at least one staff member.").optional(),
+  candidates: z.array(z.record(z.string())).optional(),
+  selectedColumns: z.array(z.string()).optional(),
 });
 
 const canViewTasks = (role?: string, status?: string) =>
@@ -54,6 +49,11 @@ export async function GET() {
               },
             },
           },
+          candidates: {
+            select: {
+              status: true,
+            },
+          },
         },
         orderBy: { createdAt: "desc" },
       });
@@ -72,18 +72,45 @@ export async function GET() {
               },
             },
           },
+          candidates: {
+            select: {
+              status: true,
+            },
+          },
         },
         orderBy: { createdAt: "desc" },
       });
     }
 
-    return NextResponse.json({
-      tasks: tasks.map((task) => ({
-        ...task,
-        assignedStaff: task.assignedStaffMembers.map((assignment) => assignment.user),
+    const tasksWithDetails = tasks.map((task) => {
+      const candidates = task.candidates;
+      const totalCandidates = candidates.length;
+      
+      let status = "PENDING";
+      if (totalCandidates > 0) {
+        const pendingCount = candidates.filter(c => c.status.toLowerCase() === "pending").length;
+        if (pendingCount === 0) {
+          status = "COMPLETED";
+        } else if (pendingCount < totalCandidates) {
+          status = "IN_PROGRESS";
+        } else {
+          status = "PENDING";
+        }
+      }
+
+      return {
+        id: task.id,
+        name: task.name,
         createdAt: task.createdAt.toISOString(),
         updatedAt: task.updatedAt.toISOString(),
-      })),
+        assignedStaff: task.assignedStaffMembers.map((assignment) => assignment.user),
+        candidateCount: totalCandidates,
+        status,
+      };
+    });
+
+    return NextResponse.json({
+      tasks: tasksWithDetails,
     });
   } catch (error) {
     console.error("Unable to load tasks.", error);
@@ -115,7 +142,6 @@ export async function POST(request: Request) {
     const task = await prisma.task.create({
       data: {
         name: parsed.data.name,
-        googleSheetUrl: parsed.data.googleSheetUrl,
         assignedStaffMembers: {
           create: parsed.data.assignedStaffIds.map((userId) => ({
             userId,
@@ -137,15 +163,75 @@ export async function POST(request: Request) {
       },
     });
 
+    const COLUMN_MAP: Record<string, string> = {
+      'Name': 'name',
+      'Email ID': 'email',
+      'Phone Number': 'phone',
+      'Current Location': 'current_location',
+      'Preferred Locations': 'preferred_locations',
+      'Total Experience': 'experience',
+      'Under Graduation degree': 'qualification',
+    };
+
+    let candidateCount = 0;
+
+    if (parsed.data.candidates && parsed.data.candidates.length > 0 && parsed.data.selectedColumns) {
+      const selectedCols = parsed.data.selectedColumns;
+      // Create batch
+      const batch = await prisma.batch.create({
+        data: {
+          title: parsed.data.name,
+          uploaded_by: session!.user.id,
+          status: 'ACTIVE',
+        },
+      });
+
+      // Map each candidate row
+      const candidateData = parsed.data.candidates.map((c) => {
+        const fields: Record<string, string | null> = {};
+        Object.entries(COLUMN_MAP).forEach(([xlsxCol, dbField]) => {
+          if (selectedCols.includes(xlsxCol)) {
+            fields[dbField] = c[xlsxCol] || null;
+          } else {
+            fields[dbField] = null;
+          }
+        });
+        
+        const staffId = parsed.data.assignedStaffIds[0];
+
+        return {
+          batch_id: batch.id,
+          taskId: task.id,
+          assigned_to: staffId,
+          name: fields.name,
+          email: fields.email,
+          phone: fields.phone,
+          current_location: fields.current_location,
+          preferred_locations: fields.preferred_locations,
+          experience: fields.experience,
+          qualification: fields.qualification,
+          status: 'PENDING',
+        };
+      });
+
+      if (candidateData.length > 0) {
+        await prisma.candidate.createMany({ data: candidateData });
+        candidateCount = candidateData.length;
+      }
+    }
+
     return NextResponse.json(
       {
         task: {
-          ...task,
+          id: task.id,
+          name: task.name,
           assignedStaff: task.assignedStaffMembers.map((assignment) => assignment.user),
+          candidateCount,
+          status: "PENDING",
           createdAt: task.createdAt.toISOString(),
           updatedAt: task.updatedAt.toISOString(),
         },
-        message: "Task created successfully.",
+        message: "Task assigned successfully.",
       },
       { status: 201 },
     );
