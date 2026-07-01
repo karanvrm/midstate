@@ -46,8 +46,13 @@ export async function getAssignedCandidates(taskId?: string): Promise<Candidate[
 
 export async function updateCandidateStatus(
   id: string,
-  payload: { status: CandidateStatus; remarks: string }
-): Promise<void> {
+  payload: {
+    status: CandidateStatus;
+    remarks: string;
+    selectedCompany?: string;
+    selectedPosition?: string;
+  }
+): Promise<Candidate> {
   const res = await fetch(`/api/candidates/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -58,4 +63,7 @@ export async function updateCandidateStatus(
     const err = await res.json().catch(() => ({}));
     throw new Error((err as { error?: string }).error ?? 'Failed to update candidate');
   }
+
+  const data = await res.json();
+  return data.candidate as Candidate;
 }

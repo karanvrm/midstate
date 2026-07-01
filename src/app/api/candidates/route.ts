@@ -51,6 +51,9 @@ export async function GET(request: Request) {
         qualification: c.qualification ?? "",
         status: toStatus(c.status),
         remarks: c.remarks ?? "",
+        selectedCompany: c.selectedCompany ?? "",
+        selectedPosition: c.selectedPosition ?? "",
+        selectedAt: c.selectedAt?.toISOString() ?? null,
         updatedAt: c.updated_at.toISOString(),
       })),
     });

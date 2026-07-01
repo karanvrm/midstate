@@ -27,7 +27,9 @@ export default withAuth(
 
     if (
       pathname.startsWith("/dashboard/owner/job-descriptions") ||
-      pathname.startsWith("/dashboard/owner/briefings")
+      pathname.startsWith("/dashboard/owner/briefings") ||
+      pathname.startsWith("/dashboard/owner/analytics") ||
+      pathname.startsWith("/dashboard/owner/placements")
     ) {
       if (token?.role !== "OWNER" && token?.role !== "ADMIN") {
         return NextResponse.redirect(new URL("/dashboard", request.url));

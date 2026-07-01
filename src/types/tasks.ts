@@ -33,6 +33,9 @@ export interface Candidate {
   qualification: string;
   status: CandidateStatus;
   remarks: string;
+  selectedCompany: string;
+  selectedPosition: string;
+  selectedAt: string | null;
   updatedAt: string;
 }
 

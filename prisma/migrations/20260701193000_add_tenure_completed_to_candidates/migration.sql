@@ -1,0 +1,2 @@
+ALTER TABLE "Candidate"
+ADD COLUMN IF NOT EXISTS "tenureCompleted" BOOLEAN NOT NULL DEFAULT false;

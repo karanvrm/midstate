@@ -1,0 +1,4 @@
+ALTER TABLE "Candidate"
+ADD COLUMN IF NOT EXISTS "selectedCompany" TEXT,
+ADD COLUMN IF NOT EXISTS "selectedPosition" TEXT,
+ADD COLUMN IF NOT EXISTS "selectedAt" TIMESTAMP(3);

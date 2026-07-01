@@ -39,7 +39,8 @@ import {
   BellIcon,
   BookOpenTextIcon,
   HomeIcon,
-  BriefcaseIcon
+  BriefcaseIcon,
+  BarChart3Icon
 } from "lucide-react";
 
 interface UserSession {
@@ -97,6 +98,18 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
       active: pathname.startsWith("/dashboard/owner/applications"),
     },
     {
+      label: "Placements",
+      href: "/dashboard/owner/placements",
+      icon: ShieldCheckIcon,
+      active: pathname.startsWith("/dashboard/owner/placements"),
+    },
+    {
+      label: "Analytics",
+      href: "/dashboard/owner/analytics",
+      icon: BarChart3Icon,
+      active: pathname.startsWith("/dashboard/owner/analytics"),
+    },
+    {
       label: "Attendance",
       href: "/dashboard/owner/attendance",
       icon: CalendarIcon,
@@ -144,6 +157,12 @@ const DashboardLayoutClient = ({ children, user }: DashboardLayoutClientProps) =
       href: "/dashboard/staff/applications",
       icon: BriefcaseIcon,
       active: pathname.startsWith("/dashboard/staff/applications"),
+    },
+    {
+      label: "Analytics",
+      href: "/dashboard/staff/analytics",
+      icon: BarChart3Icon,
+      active: pathname.startsWith("/dashboard/staff/analytics"),
     },
     {
       label: "Briefing",

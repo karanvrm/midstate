@@ -39,18 +39,55 @@ function UpdateModal({
     readOnly = false,
 }: {
     candidate: Candidate;
-    onSave: (id: string, status: CandidateStatus, remark: string) => Promise<void>;
+    onSave: (
+        id: string,
+        status: CandidateStatus,
+        remark: string,
+        placement?: { selectedCompany: string; selectedPosition: string }
+    ) => Promise<void>;
     onClose: () => void;
     readOnly?: boolean;
 }) {
     const [status, setStatus] = useState<CandidateStatus>(candidate.status);
     const [remark, setRemark] = useState(candidate.remarks ?? '');
+    const [selectedCompany, setSelectedCompany] = useState(candidate.selectedCompany ?? '');
+    const [selectedPosition, setSelectedPosition] = useState(candidate.selectedPosition ?? '');
+    const [error, setError] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
+    const isPlaced = candidate.status === 'selected';
+    const showPlacementFields = status === 'selected' || isPlaced;
+    const lockPlacementFields = readOnly || isPlaced;
+    const lockStatus = readOnly || isPlaced;
+    const missingPlacementDetails =
+        !isPlaced &&
+        status === 'selected' &&
+        (!selectedCompany.trim() || !selectedPosition.trim());
 
     async function handleSave() {
+        setError(null);
+        const company = selectedCompany.trim();
+        const position = selectedPosition.trim();
+
+        if (!isPlaced && status === 'selected' && (!company || !position)) {
+            setError('Company Name and Position/Post are required.');
+            return;
+        }
+
         setSaving(true);
-        await onSave(candidate.id, status, remark);
-        setSaving(false);
+        try {
+            await onSave(
+                candidate.id,
+                status,
+                remark,
+                !isPlaced && status === 'selected'
+                    ? { selectedCompany: company, selectedPosition: position }
+                    : undefined
+            );
+        } catch (err: any) {
+            setError(err.message ?? 'Unable to update candidate.');
+        } finally {
+            setSaving(false);
+        }
     }
 
     return (
@@ -64,12 +101,18 @@ function UpdateModal({
                     {candidate.phone}{candidate.currentLocation ? ` · ${candidate.currentLocation}` : ''}
                 </p>
 
+                {isPlaced ? (
+                    <div className="mb-5 rounded-lg border border-blue-400/20 bg-blue-500/10 px-3 py-2 text-sm text-blue-200">
+                        This candidate has already been placed. Selected status cannot be modified.
+                    </div>
+                ) : null}
+
                 <div className="space-y-4">
                     <div className="space-y-1.5">
                         <label className="text-sm font-medium">Status</label>
                         <select
                             value={status}
-                            disabled={readOnly}
+                            disabled={lockStatus}
                             onChange={(e) => setStatus(e.target.value as CandidateStatus)}
                             className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-foreground focus:border-violet-400/50 focus:outline-none focus:ring-1 focus:ring-violet-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -86,6 +129,31 @@ function UpdateModal({
                         </select>
                     </div>
 
+                    {showPlacementFields ? (
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium">Company Name</label>
+                                <input
+                                    value={selectedCompany}
+                                    disabled={lockPlacementFields}
+                                    onChange={(e) => setSelectedCompany(e.target.value)}
+                                    placeholder="Company name"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-400/50 focus:outline-none focus:ring-1 focus:ring-violet-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                                />
+                            </div>
+                            <div className="space-y-1.5">
+                                <label className="text-sm font-medium">Position / Post</label>
+                                <input
+                                    value={selectedPosition}
+                                    disabled={lockPlacementFields}
+                                    onChange={(e) => setSelectedPosition(e.target.value)}
+                                    placeholder="Position / post"
+                                    className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-400/50 focus:outline-none focus:ring-1 focus:ring-violet-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                                />
+                            </div>
+                        </div>
+                    ) : null}
+
                     <div className="space-y-1.5">
                         <label className="text-sm font-medium">Remark</label>
                         <textarea
@@ -97,6 +165,11 @@ function UpdateModal({
                             className="w-full resize-vertical rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:border-violet-400/50 focus:outline-none focus:ring-1 focus:ring-violet-400/30 disabled:opacity-50 disabled:cursor-not-allowed"
                         />
                     </div>
+                    {error ? (
+                        <p className="rounded-lg border border-red-400/30 bg-red-400/10 px-3 py-2 text-sm text-red-300">
+                            {error}
+                        </p>
+                    ) : null}
                 </div>
 
                 <div className="mt-6 flex justify-end gap-3">
@@ -118,7 +191,7 @@ function UpdateModal({
                             </button>
                             <button
                                 onClick={handleSave}
-                                disabled={saving}
+                                disabled={saving || missingPlacementDetails}
                                 className="rounded-lg bg-violet-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-500 disabled:opacity-50"
                             >
                                 {saving ? 'Saving…' : 'Save'}
@@ -171,10 +244,15 @@ export default function MyTasksPage() {
         loadData();
     }, [taskId]);
 
-    async function handleSave(id: string, status: CandidateStatus, remarks: string) {
-        await updateCandidateStatus(id, { status, remarks });
+    async function handleSave(
+        id: string,
+        status: CandidateStatus,
+        remarks: string,
+        placement?: { selectedCompany: string; selectedPosition: string }
+    ) {
+        const updated = await updateCandidateStatus(id, { status, remarks, ...placement });
         setCandidates((prev) =>
-            prev.map((c) => (c.id === id ? { ...c, status, remarks } : c))
+            prev.map((c) => (c.id === id ? updated : c))
         );
         setActive(null);
     }

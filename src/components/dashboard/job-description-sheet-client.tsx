@@ -344,6 +344,21 @@ const JobDescriptionSheetClient = ({
     setDraftRowColors((previous) => [...previous, null]);
   }, []);
 
+  const handleInsertRow = useCallback((insertIndex: number) => {
+    setDraftTableData((previous) => {
+      const columnCount = previous[0]?.length ?? JOB_DESCRIPTION_TABLE_COLS;
+      const newRow = Array.from({ length: columnCount }, () => "");
+      const nextTable = [...previous];
+      nextTable.splice(insertIndex, 0, newRow);
+      return nextTable;
+    });
+    setDraftRowColors((previous) => {
+      const nextColors = [...previous];
+      nextColors.splice(insertIndex, 0, null);
+      return nextColors;
+    });
+  }, []);
+
   const handleAddColumn = useCallback(() => {
     setDraftTableData((previous) => previous.map((row) => [...row, ""]));
     setDraftColumnWidths((previous) => [...previous, DEFAULT_COLUMN_WIDTH]);
@@ -698,6 +713,22 @@ const JobDescriptionSheetClient = ({
                             />
                           ) : null}
                         </div>
+                        {isEditMode && rowIndex < activeTableData.length - 1 ? (
+                          <div
+                            role="button"
+                            aria-label={`Insert row after row ${rowIndex + 1}`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleInsertRow(rowIndex + 1);
+                            }}
+                            className="group absolute bottom-0 left-0 z-30 h-4 w-full translate-y-1/2 cursor-pointer select-none"
+                          >
+                            <div className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded-full transition-colors group-hover:bg-violet-400/40" />
+                            <div className="absolute left-1/2 top-1/2 flex size-5 -translate-x-1/2 -translate-y-1/2 scale-0 items-center justify-center rounded-full border border-violet-400/40 bg-neutral-900 text-violet-200 shadow-[0_4px_12px_rgba(0,0,0,0.4)] transition-all duration-150 group-hover:scale-100 hover:border-violet-400/60 hover:bg-violet-400/20 hover:text-violet-100">
+                              <PlusIcon className="size-3" />
+                            </div>
+                          </div>
+                        ) : null}
                       </td>
                       {row.map((cellValue, colIndex) => (
                         <td

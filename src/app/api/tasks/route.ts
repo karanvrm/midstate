@@ -164,13 +164,16 @@ export async function POST(request: Request) {
     });
 
     const COLUMN_MAP: Record<string, string> = {
-      'Name': 'name',
       'Email ID': 'email',
-      'Phone Number': 'phone',
       'Current Location': 'current_location',
       'Preferred Locations': 'preferred_locations',
       'Total Experience': 'experience',
       'Under Graduation degree': 'qualification',
+    };
+
+    const getRowValue = (row: Record<string, string>, index: number) => {
+      const value = Object.values(row)[index];
+      return typeof value === "string" && value.trim() ? value.trim() : null;
     };
 
     let candidateCount = 0;
@@ -189,6 +192,9 @@ export async function POST(request: Request) {
       // Map each candidate row
       const candidateData = parsed.data.candidates.map((c) => {
         const fields: Record<string, string | null> = {};
+        fields.name = getRowValue(c, 0);
+        fields.phone = getRowValue(c, 1);
+
         Object.entries(COLUMN_MAP).forEach(([xlsxCol, dbField]) => {
           if (selectedCols.includes(xlsxCol)) {
             fields[dbField] = c[xlsxCol] || null;
